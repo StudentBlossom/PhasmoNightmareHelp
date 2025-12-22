@@ -1,0 +1,140 @@
+<html>
+	<head>
+		<title>Phasmo nightmare</title>
+		<script>
+			
+			let ghostData = [
+			["ghost",[1,1,1,1,1],"50","slow","double smudge hunt cooldown",""],
+			["ghost",[1,1,1,1,1],"50","slow","double smudge hunt cooldown","female"]
+			]
+			let evidences = [
+			["dots",0],
+			["writing",0],
+			["EMF 5",0],
+			["orbs",0],
+			["UV",0],
+			["freezing",0],
+			["box",0]
+			]
+			
+			
+			let $ = (id) =>{return document.getElementById(id)}
+			let getI = (stringid) => {return parseInt(stringid.slice(1))}
+			
+			
+			function bootup (){
+				document.addEventListener('contextmenu', event => event.preventDefault());
+				
+				function evidenceHTML (entry, iter){
+					let element = document.createElement("span")
+					let innerText = document.createTextNode(entry[0]);
+					element.appendChild(innerText)
+					element.classList.add("evidence")
+					element.id="E"+iter
+					element.onclick=function () {evidenceClick(this,1)}
+					element.oncontextmenu=function () {evidenceClick(this,-1)}
+					$("evidences").appendChild(element)					
+				}
+				function evidenceClick (element,mode) {				
+					if(mode==0) {
+						evidences[i][1]=0;	
+					} 
+					let i=getI(element.id)
+					let state = evidences[i][1]+mode
+					if(state>=1){
+						evidences[i][1]=1
+						element.classList.add("proof")
+						} else if(state<=-1){
+						element.classList.add("discounted")
+						evidences[i][1]=-1
+						} else {
+						element.classList.remove("proof")
+						element.classList.remove("discounted")
+						evidences[i][1]=0;							
+					}
+				}
+				evidences.map(evidenceHTML)
+				
+			}
+			
+			
+			
+			
+			
+		</script>
+		<style>
+			@import url('https://fonts.cdnfonts.com/css/lazy-dog');
+		</style>
+		<style>
+			*{
+			margin:0px;
+			padding:0px;
+			--pageBG: #F8F3CB;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			
+			}
+			
+			body{
+			background-color:black;
+			}
+			
+			.evidence{
+			cursor: pointer;
+			}
+			.proof{
+			color:green;
+			}
+			.discounted{
+			color:red;
+			}
+			
+			
+			
+			.page1{
+			width:44%;
+			font-family: 'Lazy Dog', sans-serif;
+			background-size: 40px 40px;
+			background-color:var(--pageBG);
+			background-image:
+			linear-gradient(to right, gray 1px, transparent 1px),
+			linear-gradient(to bottom, gray 1px, transparent 1px);
+			}
+			
+			.m5{
+			width:2%;
+			}
+			.m2{
+			width:2%;
+			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
+			}
+			
+			.hidden{
+			visibility:hidden;
+			}
+			
+			.m5, .m2, .page1{
+			float:left;
+			display:inline-block;
+			}
+		</style>
+	</head>
+	
+	<body id="body" onload="bootup()">
+		<div><div class="hidden">.</div></div>
+		<div>
+			<div class="m5"><div class="hidden">.</div></div>
+			<div class="page1">
+				<div id="evidences"></div>
+				<div id="info"> This text will be deleted</div>
+			</div>
+			<div class="m2"><div class="hidden">.</div></div>
+			<div class="page1"> eee</div>
+			<div class="m5"><div class="hidden">.</div></div>
+		</div>
+	</body>
+</html>	
