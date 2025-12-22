@@ -3,10 +3,33 @@
 		<title>Phasmo nightmare</title>
 		<script>
 			
-			let ghostData = [
-			["ghost",[1,1,1,1,1],"50","slow","double smudge hunt cooldown",""],
-			["ghost",[1,1,1,1,1],"50","slow","double smudge hunt cooldown","female"]
-			]
+
+
+
+
+let ghostData = [
+["Spirit",			[0,1,1,0,0,0,1],""],
+["Wraith",			[1,0,1,0,0,0,1],""],
+["Phantom",			[1,0,0,0,1,0,1],""],
+["Poltergeist",		[0,1,0,0,1,0,1],""],
+["Banshee",			[1,0,0,1,1,0,0],""],
+["Jinn",			[0,0,1,0,1,1,0],""],
+["Mare",			[0,1,0,1,0,0,1],""],
+["Revenant",		[0,1,0,1,0,1,0],""],
+["Shade",			[0,1,1,0,0,1,0],""],
+["Demon",			[0,1,0,0,1,1,0],""],
+["Yurei",			[1,0,0,1,0,1,0],""],
+["Oni",				[1,0,1,0,0,1,0],""],
+["Yokai",			[1,0,0,1,0,0,1],""],
+["Hantu",			[0,0,0,1,1,2,0],""],
+["Goryo",			[2,0,1,0,1,0,0],""],
+["Myling",			[0,1,1,0,1,0,0],""],
+["Onryo",			[0,0,0,1,0,1,1],""],
+["The_Twins",		[0,0,1,0,0,1,1],""],
+["Raiju",			[1,0,1,1,0,0,0],""],
+["Obake",			[0,0,1,1,2,0,0],""],
+["The_Mimic",		[0,0,0,2,1,1,1],""]
+]
 			let evidences = [
 			["dots",0],
 			["writing",0],
@@ -21,10 +44,33 @@
 			let $ = (id) =>{return document.getElementById(id)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
 			
+			function evidenceClick (element,mode) {				
+				if(mode==0) {
+					evidences[i][1]=0;	
+				} 
+				let i=getI(element.id)
+				let state = evidences[i][1]+mode
+				if(state>=1){
+					evidences[i][1]=1
+					element.classList.add("proof")
+					} else if(state<=-1){
+					element.classList.add("manualdiscounted")
+					evidences[i][1]=-1
+					} else {
+					element.classList.remove("proof")
+					element.classList.remove("manualdiscounted")
+					evidences[i][1]=0;							
+				}
+			}
+			
+			function ghostInfo(id){
+				console.log(id)
+			}
 			
 			function bootup (){
+				//disable right click popup
 				document.addEventListener('contextmenu', event => event.preventDefault());
-				
+				//add all evidences
 				function evidenceHTML (entry, iter){
 					let element = document.createElement("span")
 					let innerText = document.createTextNode(entry[0]);
@@ -35,27 +81,30 @@
 					element.oncontextmenu=function () {evidenceClick(this,-1)}
 					$("evidences").appendChild(element)					
 				}
-				function evidenceClick (element,mode) {				
-					if(mode==0) {
-						evidences[i][1]=0;	
-					} 
-					let i=getI(element.id)
-					let state = evidences[i][1]+mode
-					if(state>=1){
-						evidences[i][1]=1
-						element.classList.add("proof")
-						} else if(state<=-1){
-						element.classList.add("discounted")
-						evidences[i][1]=-1
-						} else {
-						element.classList.remove("proof")
-						element.classList.remove("discounted")
-						evidences[i][1]=0;							
-					}
-				}
 				evidences.map(evidenceHTML)
-				
+				//add all ghosts
+				function ghostHTML (entry,iter){
+					let rowNum=iter%3
+					if(rowNum==0){
+						<!-- let newLine = document.createElement("br") -->
+						<!-- $("ghosts").appendChild(newLine) -->
+					}
+					let cell = document.createElement("p")
+					cell.classList.add("row"+rowNum)
+					
+					let element = document.createElement("span")
+					let innerText = document.createTextNode(entry[0]);
+					element.appendChild(innerText)
+					element.id="G"+iter
+					element.classList.add("ghost")
+					element.onclick=function () {this.classList.toggle("selected");ghostInfo(getI(this.id))}
+					element.oncontextmenu=function () {this.classList.toggle("manualdiscounted")}
+					cell.appendChild(element)
+					$("ghosts").appendChild(cell)
+				}
+				ghostData.map(ghostHTML)
 			}
+			
 			
 			
 			
@@ -76,7 +125,6 @@
 			-moz-user-select: none;
 			-ms-user-select: none;
 			user-select: none;
-			
 			}
 			
 			body{
@@ -89,13 +137,34 @@
 			.proof{
 			color:green;
 			}
-			.discounted{
-			color:red;
+			.manualdiscounted{
+			text-decoration: line-through;
 			}
 			
 			
+			.ghostContainer{
+			display:grid;
+			grid-template-columns: auto auto auto ;
+			justify-content:space-between;
+			}
+			.ghost:hover{
+			}
+			.selected{
+			border:1px solid black;
+			border-radius:100%;
+			}
 			
-			.page1{
+			.row0{
+			text-align:left;
+			}
+			.row1{
+			text-align:center;
+			}
+			.row2{
+			text-align:right;
+			}
+			
+			.page{
 			width:44%;
 			font-family: 'Lazy Dog', sans-serif;
 			background-size: 40px 40px;
@@ -117,7 +186,15 @@
 			visibility:hidden;
 			}
 			
-			.m5, .m2, .page1{
+			.line{
+			border-radius:35%;
+			border: 2px black solid;
+			width:90%;
+			margin-left:5%;
+			margin-right:5%;
+			}
+			
+			.m5, .m2, .page{
 			float:left;
 			display:inline-block;
 			}
@@ -128,12 +205,19 @@
 		<div><div class="hidden">.</div></div>
 		<div>
 			<div class="m5"><div class="hidden">.</div></div>
-			<div class="page1">
+			<div class="page">
 				<div id="evidences"></div>
+				<hr class="line"></hr>
+				<div id="ghosts" class="ghostContainer"></div>
+				
 				<div id="info"> This text will be deleted</div>
 			</div>
 			<div class="m2"><div class="hidden">.</div></div>
-			<div class="page1"> eee</div>
+			<div class="page"> 
+				
+				
+				
+			eee</div>
 			<div class="m5"><div class="hidden">.</div></div>
 		</div>
 	</body>
