@@ -3,34 +3,34 @@
 		<title>Phasmo nightmare</title>
 		<script>
 			
-
-
-
-
-let ghostData = [
-["Spirit",			[0,1,1,0,0,0,1],""],
-["Wraith",			[1,0,1,0,0,0,1],""],
-["Phantom",			[1,0,0,0,1,0,1],""],
-["Poltergeist",		[0,1,0,0,1,0,1],""],
-["Banshee",			[1,0,0,1,1,0,0],""],
-["Jinn",			[0,0,1,0,1,1,0],""],
-["Mare",			[0,1,0,1,0,0,1],""],
-["Revenant",		[0,1,0,1,0,1,0],""],
-["Shade",			[0,1,1,0,0,1,0],""],
-["Demon",			[0,1,0,0,1,1,0],""],
-["Yurei",			[1,0,0,1,0,1,0],""],
-["Oni",				[1,0,1,0,0,1,0],""],
-["Yokai",			[1,0,0,1,0,0,1],""],
-["Hantu",			[0,0,0,1,1,2,0],""],
-["Goryo",			[2,0,1,0,1,0,0],""],
-["Myling",			[0,1,1,0,1,0,0],""],
-["Onryo",			[0,0,0,1,0,1,1],""],
-["The_Twins",		[0,0,1,0,0,1,1],""],
-["Raiju",			[1,0,1,1,0,0,0],""],
-["Obake",			[0,0,1,1,2,0,0],""],
-["The_Mimic",		[0,0,0,2,1,1,1],""]
-]
-			let evidences = [
+			
+			
+			
+			const reqEv=2
+			const ghostData = [
+			["Spirit",			[0,1,1,0,0,0,1],""],
+			["Wraith",			[1,0,1,0,0,0,1],""],
+			["Phantom",			[1,0,0,0,1,0,1],""],
+			["Poltergeist",		[0,1,0,0,1,0,1],""],
+			["Banshee",			[1,0,0,1,1,0,0],""],
+			["Jinn",			[0,0,1,0,1,1,0],""],
+			["Mare",			[0,1,0,1,0,0,1],""],
+			["Revenant",		[0,1,0,1,0,1,0],""],
+			["Shade",			[0,1,1,0,0,1,0],""],
+			["Demon",			[0,1,0,0,1,1,0],""],
+			["Yurei",			[1,0,0,1,0,1,0],""],
+			["Oni",				[1,0,1,0,0,1,0],""],
+			["Yokai",			[1,0,0,1,0,0,1],""],
+			["Hantu",			[0,0,0,1,1,2,0],""],
+			["Goryo",			[2,0,1,0,1,0,0],""],
+			["Myling",			[0,1,1,0,1,0,0],""],
+			["Onryo",			[0,0,0,1,0,1,1],""],
+			["The_Twins",		[0,0,1,0,0,1,1],""],
+			["Raiju",			[1,0,1,1,0,0,0],""],
+			["Obake",			[0,0,1,1,2,0,0],""],
+			["The_Mimic",		[0,0,0,2,1,1,1],""]
+			]
+			const evidences = [
 			["dots",0],
 			["writing",0],
 			["EMF 5",0],
@@ -39,7 +39,8 @@ let ghostData = [
 			["freezing",0],
 			["box",0]
 			]
-			
+			const removedEv=1;
+			let selectedGhost = -1;
 			
 			let $ = (id) =>{return document.getElementById(id)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
@@ -61,11 +62,84 @@ let ghostData = [
 					element.classList.remove("manualdiscounted")
 					evidences[i][1]=0;							
 				}
+				discountGhosts(evidences,ghostData)
 			}
 			
 			function ghostInfo(id){
+				$("ghostLink").innerText=ghostData[id][0]
+				$("ghostLink").href="https://phasmophobia.fandom.com/wiki/"+ghostData[id][0]
 				console.log(id)
 			}
+			
+			
+			function discountGhosts (evidences,ghostData) {
+				<!-- let uselessEvidences = [] -->
+				<!-- evidences.forEach((val,ind)=>{ -->
+					<!-- if(val[1]==0){ -->
+						<!-- uselessEvidences[ind]=0 -->
+						<!-- }else { -->
+						<!-- uselessEvidences[ind]=-1; -->
+					<!-- } -->
+				<!-- }) -->
+				for(let i=0;i<ghostData.length;i++){
+					let hasRequiredEvidence = [false,-1,-1];
+					let isDiscounted = false;
+					let wrongEvidence = 0;
+					let rightEvidence = 0;
+					let amountEvidence = 0;
+					for(let ii=0;ii<evidences.length;ii++){
+						let ghostEv = ghostData[i][1][ii];
+						let curEv = evidences[ii][1]
+						
+						if(ghostEv==0){
+							if(curEv==1){
+								isDiscounted=true;
+								break;
+							}
+						}
+						if(ghostEv==reqEv){
+							amountEvidence++;
+							hasRequiredEvidence=[true,curEv];
+							if(curEv==-1){
+								hasRequiredEvidence=[false,curEv];
+								isDiscounted=true;
+								break;
+							}
+						}
+						if(ghostEv==1){
+							amountEvidence++;
+							if(curEv==1){
+								rightEvidence++
+							} else 
+							if(curEv==-1){
+								wrongEvidence++;
+							}
+						}
+					}
+					if(wrongEvidence>removedEv){
+						isDiscounted=true;
+					}
+					if(hasRequiredEvidence[0]){
+						if(rightEvidence>=amountEvidence-removedEv){//if we don't have more evidence we need
+							if(hasRequiredEvidence[1]!==1){
+								isDiscounted=true;
+							}
+							}
+						}
+						if(isDiscounted){
+							$("G"+i).classList.add("discounted")
+							} else {
+							$("G"+i).classList.remove("discounted")
+							
+						}
+						
+						
+				}
+			}
+			
+			function resetButton (){
+				
+				}
 			
 			function bootup (){
 				//disable right click popup
@@ -97,18 +171,13 @@ let ghostData = [
 					element.appendChild(innerText)
 					element.id="G"+iter
 					element.classList.add("ghost")
-					element.onclick=function () {this.classList.toggle("selected");ghostInfo(getI(this.id))}
+					element.onclick=function () {this.classList.add("selected");ghostInfo(getI(this.id))}
 					element.oncontextmenu=function () {this.classList.toggle("manualdiscounted")}
 					cell.appendChild(element)
 					$("ghosts").appendChild(cell)
 				}
 				ghostData.map(ghostHTML)
 			}
-			
-			
-			
-			
-			
 			
 		</script>
 		<style>
@@ -131,14 +200,23 @@ let ghostData = [
 			background-color:black;
 			}
 			
+			.evidencesContainer{
+			display:flex;
+						justify-content:space-between;
+			}
+			
 			.evidence{
 			cursor: pointer;
+			font-size:20px;
 			}
 			.proof{
 			color:green;
 			}
 			.manualdiscounted{
 			text-decoration: line-through;
+			}
+			.discounted{
+			color:gray;
 			}
 			
 			
@@ -172,6 +250,7 @@ let ghostData = [
 			background-image:
 			linear-gradient(to right, gray 1px, transparent 1px),
 			linear-gradient(to bottom, gray 1px, transparent 1px);
+			height:80%;
 			}
 			
 			.m5{
@@ -179,6 +258,7 @@ let ghostData = [
 			}
 			.m2{
 			width:2%;
+			height:80%;
 			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
 			}
 			
@@ -198,6 +278,26 @@ let ghostData = [
 			float:left;
 			display:inline-block;
 			}
+			
+			.cornerContainer{
+			position:relative;
+			}
+			.corner{
+			position:absolute;
+			bottom:0;
+			right:0;
+			background:transparent;
+			border-bottom:50px solid #A8906B;
+			border-top:5px solid #FEF2C4;
+			border-left:50px solid #FEF2C4;
+			border-right:0px solid transparent;
+			width:0;
+			height:0;
+			}
+			
+			
+
+			
 		</style>
 	</head>
 	
@@ -206,7 +306,9 @@ let ghostData = [
 		<div>
 			<div class="m5"><div class="hidden">.</div></div>
 			<div class="page">
-				<div id="evidences"></div>
+				<h1>Evidences</h1>
+				<hr class="line"></hr>
+				<div id="evidences" class="evidencesContainer"></div>
 				<hr class="line"></hr>
 				<div id="ghosts" class="ghostContainer"></div>
 				
@@ -214,10 +316,22 @@ let ghostData = [
 			</div>
 			<div class="m2"><div class="hidden">.</div></div>
 			<div class="page"> 
+				<h1> Ghost</h1>
+				<hr class="line"></hr>
+				<span class="label">Ghost: </span><a class="ghostInfo" id="ghostLink" target="_blank" href="https://phasmophobia.fandom.com/wiki/"></a><br>
+				<span class="label">Hunt%: </span><p class="ghostInfo" id="ghostHunt"></p>
+				<span class="label">Speed: </span><p class="ghostInfo" id="ghostSpeed"></p>
+				<span class="label">evidences: </span><p class="ghostInfo ghostEvidences" id="ghostEvidences"></p>
+				<span class="label">Extra: </span><p class="ghostInfo" id="ghostExtra"></p>
+				<span class="label">Indepth info: </span><p class="ghostInfo" id="ghostInDepth"></p>
 				
 				
 				
-			eee</div>
+				<hr class="line"></hr>
+				<button onclick="resetButton()">Reset</button>
+				<button onclick="showInfo()" class="corner"></button>
+
+</div>
 			<div class="m5"><div class="hidden">.</div></div>
 		</div>
 	</body>
