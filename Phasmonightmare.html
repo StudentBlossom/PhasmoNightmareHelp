@@ -8,27 +8,34 @@
 			
 			const reqEv=2
 			const ghostData = [
-			["Spirit",			[0,1,1,0,0,0,1],""],
-			["Wraith",			[1,0,1,0,0,0,1],""],
-			["Phantom",			[1,0,0,0,1,0,1],""],
-			["Poltergeist",		[0,1,0,0,1,0,1],""],
-			["Banshee",			[1,0,0,1,1,0,0],""],
-			["Jinn",			[0,0,1,0,1,1,0],""],
-			["Mare",			[0,1,0,1,0,0,1],""],
-			["Revenant",		[0,1,0,1,0,1,0],""],
-			["Shade",			[0,1,1,0,0,1,0],""],
-			["Demon",			[0,1,0,0,1,1,0],""],
-			["Yurei",			[1,0,0,1,0,1,0],""],
-			["Oni",				[1,0,1,0,0,1,0],""],
-			["Yokai",			[1,0,0,1,0,0,1],""],
-			["Hantu",			[0,0,0,1,1,2,0],""],
-			["Goryo",			[2,0,1,0,1,0,0],""],
-			["Myling",			[0,1,1,0,1,0,0],""],
-			["Onryo",			[0,0,0,1,0,1,1],""],
-			["The_Twins",		[0,0,1,0,0,1,1],""],
-			["Raiju",			[1,0,1,1,0,0,0],""],
-			["Obake",			[0,0,1,1,2,0,0],""],
-			["The_Mimic",		[0,0,0,2,1,1,1],""]
+			//ghost name, evidences(same order), hunt%, speedmode
+			["Banshee",			[1,0,0,1,1,0,0],50,0,"Is always female","The sanity check is for their target, not the average. can only kill their target during the hunt, has a unique paramic/sound recorder response."],
+			["Dayan", 			[0,0,1,1,0,0,1],65,2,"Is always female","huntspeed depends on if a closeby player is moving or not. Also hunt% is based on closebyplayer movement."	],
+			["Deogen",			[1,1,0,0,0,0,2],40,3,"has a unique spiritbox response","Always has LOS during hunt, becomes real slow when closeby but really fast otherwise, more visible during hunts."],
+			["Demon",			[0,1,0,0,1,1,0],100,0,"","hunt cooldown and smudgings prevention are shorter, crucifix range is 50% larger."],
+			["Gallu",			[0,0,1,0,1,0,1],60,2,"","very inconsistent ghost: has 3 states that cause hunt%, speed, incense duration, and crucifix range to be different."],
+			["Goryo",			[2,0,1,0,1,0,0],50,0,"Cannot change favourite ghost room","Dots will only be visible on video, won't roam far."],
+			["Hantu",			[0,0,0,1,1,2,0],50,1,"Cannot turn on the fusebox","Speed is based on temperature of the room, has freezing breath clouds during hunts."],
+			["Jinn",			[0,0,1,0,1,1,0],50,2,"","Cannot turn off the fusebox, has abilities that work if  the fuse box is on, such as: speed based on LOS and distance, sanity lowering ability that generates EMF."],
+			["Mare",			[0,1,0,1,0,0,1],60,0,"","Hunt% lower if the light is on, cannot turn on the lights, has a chance to instantly turn off a light someone turned on, likes the lightshatter event and turning off the lights."],
+			["Moroi",			[0,1,0,0,0,1,2],50,1,"Longer incense blinding duration","Speed is based on average sanity, can be the fastest ghost, hearing it(box,recorder,paramic) curses the player with higher sanity drain always."],
+			["Myling",			[0,1,1,0,1,0,0],50,0,"","Footsteps sound are quieter and the range is smaller."],
+			["Obake",			[0,0,1,1,2,0,0],50,0,"Can be a different ghost model for a single blink during hunts","Has a chance of not leaving UV-prints, a chance to have an extra finger on UV-prints, and a chance to make UV-prints last shorter."],
+			["Obambo",			[1,1,0,0,1,0,0],65,2,"","Hunt% and speed are based on it's state which switches every 2 mins, can happen during hunts, hunts can be 20% shorter then normal if it starts in aggressive state."],
+			["Oni",				[1,0,1,0,0,1,0],50,0,"Cannot do mistbal events","is more visible during hunts and is more active if a player is in the room."],
+			["Onryo",			[0,0,0,1,0,1,1],60,0,"","Uses candles as crucifix over a crucifix, every third flame it put out will try to a hunt (with delay), lit fire also lowers hunt%."],
+			["Phantom",			[1,0,0,0,1,0,1],50,0,"","Is more invisble during hunts,if a photo is taken during an event/dots the ghost model will dissapear from view and the photo and the photo won't have distortion, it can roam to a player and will leave an EMF when it arrives."],
+			["Poltergeist",		[0,1,0,0,1,0,1],50,0,"","Will throw an item every .5 seconds during a hunt if possible, can throw multiple nearby items which leaves an EMF 2."],
+			["Raiju",			[1,0,1,1,0,0,0],65,1,"Heartbeats are louder and have bigger range","Electronics raise its speed and hunting% and it's interference range is bigger."],
+			["Revenant",		[0,1,0,1,0,1,0],50,2,"","Its speed starts slow but instantly becomes really fast when it sees you."],
+			["Shade",			[0,1,1,0,0,1,0],35,0,"","It cannot do hunts,interactions or events while in the same room as a player."],
+			["Spirit",			[0,1,1,0,0,0,1],50,0,"Smudging the room last twice as long",""],
+			["Thaye",			[1,1,0,1,0,0,0],75,1,"","Becomes weaker over time if the player is in the same room or closeby, becomes really slow and low hunt% at the end."],
+			["The_Mimic",		[0,0,0,2,1,1,1],50,0,"","It mimics other ghosts and theyre secondary evidences and behaviours."]
+			["The_Twins",		[0,0,1,0,0,1,1],50,2,"Is not actually 2 ghosts","Speed depends on which version hunts, fast ghost spawns far away, can do double interactions far apart within seconds of eachother"],
+			["Wraith",			[1,0,1,0,0,0,1],50,0,"can't step in salt","Can teleport to player and that leaves EMF."],
+			["Yokai",			[1,0,0,1,0,0,1],80,0,"","When closeby and talking it increases hunt% and interactionrate, during hunts it has small voice/electronic detection range."],
+			["Yurei",			[1,0,0,1,0,1,0],50,0,"After smudging to prevent hunts it wont roam from itsfavourite room","Can close doors smoothly as event, even exit doors."]
 			]
 			const evidences = [
 			["dots",0],
@@ -66,20 +73,94 @@
 			}
 			
 			function ghostInfo(id){
-				$("ghostLink").innerText=ghostData[id][0]
-				$("ghostLink").href="https://phasmophobia.fandom.com/wiki/"+ghostData[id][0]
-				console.log(id)
+				if(selectedGhost>=0){
+					$("G"+selectedGhost).classList.remove("selected")
+				}
+				selectedGhost=id
+				let data=ghostData[id]
+				let displayData=[data[0],"","",data[1],data[4],data[5]]
+				if(data[2]==50){
+					displayData[1]="normal"
+				}else if(data[2]==100){
+				displayData[1]="always"
+				} else if(data[2]<40){
+				displayData[1]="really low"
+				} else if(data[2]<50){
+				displayData[1]="low"
+				} else if(data[2]>70){
+				displayData[1]="really high"
+				} else if(data[2]>50){
+				displayData[1]="high"
+				}
+				
+				switch(data[3]){
+					case -1:
+					displayData[2]="slow"
+					break;
+					case 1:
+					displayData[2]="fast"
+					break;
+					case 2:
+					displayData[2]="Inconsistent"
+					break;
+					case 3:
+					displayData[2]="no LOS speedup"
+					break;
+					case 0:
+					displayData[2]="normal"
+					break;
+				}
+				setInfo(displayData)
 			}
+			
+			function setInfo(data){
+				$("ghostLink").innerText=data[0]
+				$("ghostLink").href="https://phasmophobia.fandom.com/wiki/"+data[0]
+				$("ghostHunt").innerText=data[1];
+				$("ghostSpeed").innerText=data[2];
+				$("ghostEvidences").innerHTML=""
+				
+				function addEvidences(id,required){
+					let element= document.createElement("span")
+					let innerText = document.createTextNode(evidences[id][0]);
+					element.appendChild(innerText)
+					
+					element.classList.add("ghostEvidenceList")
+					if(required){
+						element.classList.add("ghostEvidenceListRequired")						
+					}
+					$("ghostEvidences").appendChild(element)
+				}
+				
+				for(let i=0;i<data[3].length;i++){
+					if(data[3][i]>0){
+						addEvidences(i,(data[3][i]==2))
+					}
+				}
+				
+				
+				if(data[4]==""){
+					$("ghostExtraLabel").classList.add("hidden")
+					$("ghostExtra").classList.add("hidden")
+					$("ghostExtraGap").classList.add("hidden")
+					} else {
+					$("ghostExtraLabel").classList.remove("hidden")
+					$("ghostExtra").classList.remove("hidden")
+					$("ghostExtraGap").classList.remove("hidden")
+				}
+				$("ghostExtra").innerText=data[4]
+				$("ghostInDepth").innerText=data[5]
+				}
 			
 			
 			function discountGhosts (evidences,ghostData) {
 				<!-- let uselessEvidences = [] -->
 				<!-- evidences.forEach((val,ind)=>{ -->
-					<!-- if(val[1]==0){ -->
-						<!-- uselessEvidences[ind]=0 -->
-						<!-- }else { -->
-						<!-- uselessEvidences[ind]=-1; -->
-					<!-- } -->
+				<!-- if(val[1]==0){ -->
+				<!-- uselessEvidences[ind]=0 -->
+				<!-- }else { -->
+				<!-- uselessEvidences[ind]=-1; -->
+				<!-- } -->
 				<!-- }) -->
 				for(let i=0;i<ghostData.length;i++){
 					let hasRequiredEvidence = [false,-1,-1];
@@ -124,22 +205,23 @@
 							if(hasRequiredEvidence[1]!==1){
 								isDiscounted=true;
 							}
-							}
 						}
-						if(isDiscounted){
-							$("G"+i).classList.add("discounted")
-							} else {
-							$("G"+i).classList.remove("discounted")
-							
-						}
-						
-						
+					}
+					if(isDiscounted){
+						$("G"+i).classList.add("discounted")
+						} else {
+						$("G"+i).classList.remove("discounted")
+					}
 				}
 			}
 			
 			function resetButton (){
-				
+				setInfo(["","","",[],"",""])
+				if(selectedGhost>=0){
+					$("G"+selectedGhost).classList.remove("selected")
 				}
+				selectedGhost=-1;
+			}
 			
 			function bootup (){
 				//disable right click popup
@@ -199,10 +281,48 @@
 			body{
 			background-color:black;
 			}
+			.hidden{
+			visibility:hidden;
+			display:none;
+			}
+			
+			.page{
+			width:44%;
+			font-family: 'Lazy Dog', sans-serif;
+			background-size: 40px 40px;
+			background-color:var(--pageBG);
+			background-image:
+			linear-gradient(to right, gray 1px, transparent 1px),
+			linear-gradient(to bottom, gray 1px, transparent 1px);
+			height:80%;
+			}
+			
+			.m5{
+			width:2%;
+			}
+			.m2{
+			width:2%;
+			height:80%;
+			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
+			}
+			
+			
+			.line{
+			border-radius:35%;
+			border: 2px black solid;
+			width:90%;
+			margin-left:5%;
+			margin-right:5%;
+			}
+			
+			.m5, .m2, .page{
+			float:left;
+			display:inline-block;
+			}
 			
 			.evidencesContainer{
 			display:flex;
-						justify-content:space-between;
+			justify-content:space-between;
 			}
 			
 			.evidence{
@@ -242,41 +362,21 @@
 			text-align:right;
 			}
 			
-			.page{
-			width:44%;
-			font-family: 'Lazy Dog', sans-serif;
-			background-size: 40px 40px;
-			background-color:var(--pageBG);
-			background-image:
-			linear-gradient(to right, gray 1px, transparent 1px),
-			linear-gradient(to bottom, gray 1px, transparent 1px);
-			height:80%;
-			}
 			
-			.m5{
-			width:2%;
+			.ghostInfoCOntainer{
+			display:grid;
+			grid-template-columns: max-content 1% auto;
 			}
-			.m2{
-			width:2%;
-			height:80%;
-			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
+			.label{
+			font-style: italic;
+			text-align:right;
 			}
+
+			.ghostEvidenceList {
 			
-			.hidden{
-			visibility:hidden;
 			}
-			
-			.line{
-			border-radius:35%;
-			border: 2px black solid;
-			width:90%;
-			margin-left:5%;
-			margin-right:5%;
-			}
-			
-			.m5, .m2, .page{
-			float:left;
-			display:inline-block;
+			.ghostEvidenceListRequired{
+			font-weight:bold;
 			}
 			
 			.cornerContainer{
@@ -296,7 +396,7 @@
 			}
 			
 			
-
+			
 			
 		</style>
 	</head>
@@ -318,20 +418,19 @@
 			<div class="page"> 
 				<h1> Ghost</h1>
 				<hr class="line"></hr>
-				<span class="label">Ghost: </span><a class="ghostInfo" id="ghostLink" target="_blank" href="https://phasmophobia.fandom.com/wiki/"></a><br>
-				<span class="label">Hunt%: </span><p class="ghostInfo" id="ghostHunt"></p>
-				<span class="label">Speed: </span><p class="ghostInfo" id="ghostSpeed"></p>
-				<span class="label">evidences: </span><p class="ghostInfo ghostEvidences" id="ghostEvidences"></p>
-				<span class="label">Extra: </span><p class="ghostInfo" id="ghostExtra"></p>
-				<span class="label">Indepth info: </span><p class="ghostInfo" id="ghostInDepth"></p>
-				
-				
-				
+				<div class="ghostInfoCOntainer">
+			<span class="label">Ghost: </span><span></span><span class="ghostInfo" ><a id="ghostLink" target="_blank" href="https://phasmophobia.fandom.com/wiki/"></a></span>
+				<span class="label">Hunt%: </span><span></span><span class="ghostInfo" id="ghostHunt"></span>
+				<span class="label">Speed: </span><span></span><span class="ghostInfo" id="ghostSpeed"></span>
+				<span class="label">evidences: </span><span></span><span class="ghostInfo ghostEvidences" id="ghostEvidences"></span>
+				<span class="label" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap"></span><span class="ghostInfo" id="ghostExtra"></span>
+				<span class="label">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
+				</div>
 				<hr class="line"></hr>
 				<button onclick="resetButton()">Reset</button>
 				<button onclick="showInfo()" class="corner"></button>
-
-</div>
+				
+			</div>
 			<div class="m5"><div class="hidden">.</div></div>
 		</div>
 	</body>
