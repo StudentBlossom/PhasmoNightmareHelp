@@ -25,17 +25,17 @@
 			["Oni",				[1,0,1,0,0,1,0],50,0,"Cannot do mistbal events","is more visible during hunts and is more active if a player is in the room."],
 			["Onryo",			[0,0,0,1,0,1,1],60,0,"","Uses candles as crucifix over a crucifix, every third flame it put out will try to a hunt (with delay), lit fire also lowers hunt%."],
 			["Phantom",			[1,0,0,0,1,0,1],50,0,"","Is more invisble during hunts,if a photo is taken during an event/dots the ghost model will dissapear from view and the photo and the photo won't have distortion, it can roam to a player and will leave an EMF when it arrives."],
-			["Poltergeist",		[0,1,0,0,1,0,1],50,0,"","Will throw an item every .5 seconds during a hunt if possible, can throw multiple nearby items which leaves an EMF 2."],
+			["Poltergeist",		[0,1,0,0,1,0,1],50,0,"","Will throw an item every .5 seconds during a hunt if possible, can throw multiple nearby items at the same time which leaves an EMF 2."],
 			["Raiju",			[1,0,1,1,0,0,0],65,1,"Heartbeats are louder and have bigger range","Electronics raise its speed and hunting% and it's interference range is bigger."],
 			["Revenant",		[0,1,0,1,0,1,0],50,2,"","Its speed starts slow but instantly becomes really fast when it sees you."],
 			["Shade",			[0,1,1,0,0,1,0],35,0,"","It cannot do hunts,interactions or events while in the same room as a player."],
 			["Spirit",			[0,1,1,0,0,0,1],50,0,"Smudging the room last twice as long",""],
 			["Thaye",			[1,1,0,1,0,0,0],75,1,"","Becomes weaker over time if the player is in the same room or closeby, becomes really slow and low hunt% at the end."],
-			["The_Mimic",		[0,0,0,2,1,1,1],50,0,"","It mimics other ghosts and theyre secondary evidences and behaviours."]
+			["The_Mimic",		[0,0,0,2,1,1,1],50,0,"","It mimics other ghosts and theyre secondary evidences and behaviours."],
 			["The_Twins",		[0,0,1,0,0,1,1],50,2,"Is not actually 2 ghosts","Speed depends on which version hunts, fast ghost spawns far away, can do double interactions far apart within seconds of eachother"],
 			["Wraith",			[1,0,1,0,0,0,1],50,0,"can't step in salt","Can teleport to player and that leaves EMF."],
 			["Yokai",			[1,0,0,1,0,0,1],80,0,"","When closeby and talking it increases hunt% and interactionrate, during hunts it has small voice/electronic detection range."],
-			["Yurei",			[1,0,0,1,0,1,0],50,0,"After smudging to prevent hunts it wont roam from itsfavourite room","Can close doors smoothly as event, even exit doors."]
+			["Yurei",			[1,0,0,1,0,1,0],50,0,"After smudging to prevent hunts it wont roam from its favourite room","Can close doors smoothly as event, even exit doors."]
 			]
 			const evidences = [
 			["dots",0],
@@ -53,9 +53,6 @@
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
 			
 			function evidenceClick (element,mode) {				
-				if(mode==0) {
-					evidences[i][1]=0;	
-				} 
 				let i=getI(element.id)
 				let state = evidences[i][1]+mode
 				if(state>=1){
@@ -72,25 +69,25 @@
 				discountGhosts(evidences,ghostData)
 			}
 			
+			
+			
 			function ghostInfo(id){
-				if(selectedGhost>=0){
-					$("G"+selectedGhost).classList.remove("selected")
-				}
+				clearSelectedGhost();
 				selectedGhost=id
 				let data=ghostData[id]
 				let displayData=[data[0],"","",data[1],data[4],data[5]]
 				if(data[2]==50){
 					displayData[1]="normal"
-				}else if(data[2]==100){
-				displayData[1]="always"
-				} else if(data[2]<40){
-				displayData[1]="really low"
-				} else if(data[2]<50){
-				displayData[1]="low"
-				} else if(data[2]>70){
-				displayData[1]="really high"
-				} else if(data[2]>50){
-				displayData[1]="high"
+					}else if(data[2]==100){
+					displayData[1]="always"
+					} else if(data[2]<40){
+					displayData[1]="really low"
+					} else if(data[2]<50){
+					displayData[1]="low"
+					} else if(data[2]>70){
+					displayData[1]="really high"
+					} else if(data[2]>50){
+					displayData[1]="high"
 				}
 				
 				switch(data[3]){
@@ -137,31 +134,21 @@
 						addEvidences(i,(data[3][i]==2))
 					}
 				}
-				
-				
 				if(data[4]==""){
-					$("ghostExtraLabel").classList.add("hidden")
-					$("ghostExtra").classList.add("hidden")
-					$("ghostExtraGap").classList.add("hidden")
+					$("ghostExtraLabel").classList.add("none")
+					$("ghostExtra").classList.add("none")
+					$("ghostExtraGap").classList.add("none")
 					} else {
-					$("ghostExtraLabel").classList.remove("hidden")
-					$("ghostExtra").classList.remove("hidden")
-					$("ghostExtraGap").classList.remove("hidden")
+					$("ghostExtraLabel").classList.remove("none")
+					$("ghostExtra").classList.remove("none")
+					$("ghostExtraGap").classList.remove("none")
 				}
 				$("ghostExtra").innerText=data[4]
 				$("ghostInDepth").innerText=data[5]
-				}
+			}
 			
 			
 			function discountGhosts (evidences,ghostData) {
-				<!-- let uselessEvidences = [] -->
-				<!-- evidences.forEach((val,ind)=>{ -->
-				<!-- if(val[1]==0){ -->
-				<!-- uselessEvidences[ind]=0 -->
-				<!-- }else { -->
-				<!-- uselessEvidences[ind]=-1; -->
-				<!-- } -->
-				<!-- }) -->
 				for(let i=0;i<ghostData.length;i++){
 					let hasRequiredEvidence = [false,-1,-1];
 					let isDiscounted = false;
@@ -215,12 +202,40 @@
 				}
 			}
 			
-			function resetButton (){
-				setInfo(["","","",[],"",""])
+			function clearSelectedGhost (){
 				if(selectedGhost>=0){
 					$("G"+selectedGhost).classList.remove("selected")
-				}
+				}				
 				selectedGhost=-1;
+			}
+			
+			function resetButton (){
+				setInfo(["","","",[],"",""])
+				clearSelectedGhost()
+				clearEvidence()
+				discountGhosts(evidences,ghostData)
+				startTimer()
+			}
+			
+			function clearEvidence () {
+				for(let i=0;i<evidences.length;i++){
+					evidences[i][1]=0;
+					$("E"+i).classList.remove("manualdiscounted")
+					$("E"+i).classList.remove("proof")
+				}
+			}
+			
+			const beginTimer = -2;
+			let timerCounter = beginTimer;
+			
+			function startTimer () {
+				clearInterval(timer)
+				timerCounter=beginTimer
+				setInterval(timer,1000)
+			}
+			
+			function timer (){
+				$("timer").innerText=timerCounter++;
 			}
 			
 			function bootup (){
@@ -240,14 +255,8 @@
 				evidences.map(evidenceHTML)
 				//add all ghosts
 				function ghostHTML (entry,iter){
-					let rowNum=iter%3
-					if(rowNum==0){
-						<!-- let newLine = document.createElement("br") -->
-						<!-- $("ghosts").appendChild(newLine) -->
-					}
 					let cell = document.createElement("p")
-					cell.classList.add("row"+rowNum)
-					
+					cell.classList.add("row"+iter%3)					
 					let element = document.createElement("span")
 					let innerText = document.createTextNode(entry[0]);
 					element.appendChild(innerText)
@@ -269,6 +278,7 @@
 			*{
 			margin:0px;
 			padding:0px;
+			--			font-size: 16px;
 			--pageBG: #F8F3CB;
 			-webkit-touch-callout: none;
 			-webkit-user-select: none;
@@ -277,24 +287,39 @@
 			-ms-user-select: none;
 			user-select: none;
 			}
+			h1{
+			font-size:36px;
+			}
 			
 			body{
 			background-color:black;
 			}
 			.hidden{
 			visibility:hidden;
-			display:none;
+			}
+			.none{
+			display:none;			
 			}
 			
 			.page{
-			width:44%;
-			font-family: 'Lazy Dog', sans-serif;
+			width:47%;
+			font-family:  'Lazy Dog', sans-serif;
 			background-size: 40px 40px;
 			background-color:var(--pageBG);
 			background-image:
 			linear-gradient(to right, gray 1px, transparent 1px),
 			linear-gradient(to bottom, gray 1px, transparent 1px);
 			height:80%;
+			}
+			
+			.page.left{
+			border-right:2px var(--pageBG) solid;
+			border-left:2px var(--pageBG) solid;
+			}
+			
+			.page.right{
+			border-left:2px var(--pageBG) solid;
+			position:relative;
 			}
 			
 			.m5{
@@ -305,7 +330,6 @@
 			height:80%;
 			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
 			}
-			
 			
 			.line{
 			border-radius:35%;
@@ -327,7 +351,7 @@
 			
 			.evidence{
 			cursor: pointer;
-			font-size:20px;
+			font-size:32px;
 			}
 			.proof{
 			color:green;
@@ -335,23 +359,20 @@
 			.manualdiscounted{
 			text-decoration: line-through;
 			}
-			.discounted{
-			color:gray;
-			}
-			
 			
 			.ghostContainer{
+			font-size: 35px;
 			display:grid;
 			grid-template-columns: auto auto auto ;
 			justify-content:space-between;
 			}
-			.ghost:hover{
+			.ghost:hover:not(.manualdiscounted){
+			text-decoration: underline;
 			}
 			.selected{
-			border:1px solid black;
+			border:1px solid gray;
 			border-radius:100%;
 			}
-			
 			.row0{
 			text-align:left;
 			}
@@ -362,16 +383,32 @@
 			text-align:right;
 			}
 			
+			.discounted{
+			color:gray;
+			animation-name: discounted;
+			animation-duration: 0.3s;
+			}
+			
+			@keyframes discounted {
+			from{color:black;}
+			to{color:gray;}
+			}
 			
 			.ghostInfoCOntainer{
 			display:grid;
 			grid-template-columns: max-content 1% auto;
 			}
+			.ghostInfo{
+			font-size:35px;
+			}
 			.label{
+			font-size:14px;
+			margin-top:1px;
+			padding-right:1px;
 			font-style: italic;
 			text-align:right;
 			}
-
+			
 			.ghostEvidenceList {
 			
 			}
@@ -394,17 +431,29 @@
 			width:0;
 			height:0;
 			}
-			
-			
-			
+			.timerContainer{
+			position:absolute;
+			bottom:5px;
+			width:100%;
+			}
+			.timer{
+			text-align:center;
+			}
+			.resetButton{
+			font-family:  'Lazy Dog', sans-serif;
+			border:1px solid black;
+			background-color:transparent;
+			margin: 0 auto;
+			display: block;
+			}
 			
 		</style>
 	</head>
 	
 	<body id="body" onload="bootup()">
-		<div><div class="hidden">.</div></div>
+		<div><p class="hidden">.</p></div>
 		<div>
-			<div class="m5"><div class="hidden">.</div></div>
+			<div class="m5"><p class="hidden">.</p></div>
 			<div class="page">
 				<h1>Evidences</h1>
 				<hr class="line"></hr>
@@ -412,26 +461,27 @@
 				<hr class="line"></hr>
 				<div id="ghosts" class="ghostContainer"></div>
 				
-				<div id="info"> This text will be deleted</div>
 			</div>
-			<div class="m2"><div class="hidden">.</div></div>
-			<div class="page"> 
+			<div class="m2"><p class="hidden">.</p></div>
+			<div class="page right"> 
 				<h1> Ghost</h1>
 				<hr class="line"></hr>
 				<div class="ghostInfoCOntainer">
-			<span class="label">Ghost: </span><span></span><span class="ghostInfo" ><a id="ghostLink" target="_blank" href="https://phasmophobia.fandom.com/wiki/"></a></span>
-				<span class="label">Hunt%: </span><span></span><span class="ghostInfo" id="ghostHunt"></span>
-				<span class="label">Speed: </span><span></span><span class="ghostInfo" id="ghostSpeed"></span>
-				<span class="label">evidences: </span><span></span><span class="ghostInfo ghostEvidences" id="ghostEvidences"></span>
-				<span class="label" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap"></span><span class="ghostInfo" id="ghostExtra"></span>
-				<span class="label">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
+					<span class="label">Ghost: </span><span></span><span class="ghostInfo" ><a id="ghostLink" target="_blank" href="https://phasmophobia.fandom.com/wiki/"></a></span>
+					<span class="label" title="highest percentage it can be">Hunt%: </span><span></span><span class="ghostInfo" id="ghostHunt"></span>
+					<span class="label" title="without LOS or player">Speed: </span><span></span><span class="ghostInfo" id="ghostSpeed"></span>
+					<span class="label">evidences: </span><span></span><span class="ghostInfo ghostEvidences" id="ghostEvidences"></span>
+					<span class="label" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap"></span><span class="ghostInfo" id="ghostExtra"></span>
+					<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
 				</div>
 				<hr class="line"></hr>
-				<button onclick="resetButton()">Reset</button>
-				<button onclick="showInfo()" class="corner"></button>
-				
+				<div class="timerContainer">
+					<p class="timer" id="timer"></p>
+					<button onclick="resetButton()" class="resetButton">Reset</button>
+				</div>
+				<button onclick="showInfo()" class="corner"></button>				
 			</div>
-			<div class="m5"><div class="hidden">.</div></div>
+			<div class="m5"><p class="hidden">.</p></div>
 		</div>
 	</body>
 </html>	
