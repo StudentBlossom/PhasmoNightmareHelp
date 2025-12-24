@@ -1,12 +1,9 @@
-<html>
+<html lang="en">
 	<head>
-		<title>Phasmo nightmare</title>
+		<title>Phasmo nightmare journal</title>
 		<script>
-			
-			
-			
-			
-			const reqEv=2
+			const removedEv=1;
+			let selectedGhost = -1;
 			const ghostData = [
 			//ghost name, evidences(same order), hunt%, speedmode
 			["Banshee",			[1,0,0,1,1,0,0],50,0,"Is always female","The sanity check is for their target, not the average. can only kill their target during the hunt, has a unique paramic/sound recorder response."],
@@ -46,8 +43,6 @@
 			["freezing",0],
 			["box",0]
 			]
-			const removedEv=1;
-			let selectedGhost = -1;
 			
 			let $ = (id) =>{return document.getElementById(id)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
@@ -118,14 +113,21 @@
 				$("ghostEvidences").innerHTML=""
 				
 				function addEvidences(id,required){
+					
+					
 					let element= document.createElement("span")
-					let innerText = document.createTextNode(evidences[id][0]);
+					let innerText = document.createTextNode(evidences[id][0]+", ");
 					element.appendChild(innerText)
 					
 					element.classList.add("ghostEvidenceList")
 					if(required){
 						element.classList.add("ghostEvidenceListRequired")						
 					}
+					if(evidences[id][1]==1){
+						element.classList.add("proof")
+						} else if(evidences[id][1]==-1){
+						element.classList.add("manualdiscounted")						
+						}
 					$("ghostEvidences").appendChild(element)
 				}
 				
@@ -147,7 +149,7 @@
 				$("ghostInDepth").innerText=data[5]
 			}
 			
-			
+			const reqEv=2
 			function discountGhosts (evidences,ghostData) {
 				for(let i=0;i<ghostData.length;i++){
 					let hasRequiredEvidence = [false,-1,-1];
@@ -212,26 +214,31 @@
 			function resetButton (){
 				setInfo(["","","",[],"",""])
 				clearSelectedGhost()
-				clearEvidence()
+				clearManualDiscountAndProof()
 				discountGhosts(evidences,ghostData)
 				startTimer()
 			}
 			
-			function clearEvidence () {
+			function clearManualDiscountAndProof () {
 				for(let i=0;i<evidences.length;i++){
 					evidences[i][1]=0;
 					$("E"+i).classList.remove("manualdiscounted")
 					$("E"+i).classList.remove("proof")
 				}
+				for(let i=0;i<ghostData.length;i++){
+					$("G"+i).classList.remove("manualdiscounted")
+				}
 			}
 			
 			const beginTimer = -2;
+			let timerInterval;
 			let timerCounter = beginTimer;
 			
 			function startTimer () {
-				clearInterval(timer)
+				clearInterval(timerInterval)
 				timerCounter=beginTimer
-				setInterval(timer,1000)
+				timer();
+				timerInterval=setInterval(timer,1000)
 			}
 			
 			function timer (){
@@ -275,9 +282,11 @@
 			@import url('https://fonts.cdnfonts.com/css/lazy-dog');
 		</style>
 		<style>
+			
 			*{
 			margin:0px;
 			padding:0px;
+			font-family:  'Lazy Dog', sans-serif;
 			--			font-size: 16px;
 			--pageBG: #F8F3CB;
 			-webkit-touch-callout: none;
@@ -303,13 +312,11 @@
 			
 			.page{
 			width:47%;
-			font-family:  'Lazy Dog', sans-serif;
 			background-size: 40px 40px;
 			background-color:var(--pageBG);
 			background-image:
 			linear-gradient(to right, gray 1px, transparent 1px),
 			linear-gradient(to bottom, gray 1px, transparent 1px);
-			height:80%;
 			}
 			
 			.page.left{
@@ -327,8 +334,10 @@
 			}
 			.m2{
 			width:2%;
-			height:80%;
 			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
+			}
+			.top{
+			height:2%;
 			}
 			
 			.line{
@@ -339,9 +348,12 @@
 			margin-right:5%;
 			}
 			
+			
 			.m5, .m2, .page{
 			float:left;
 			display:inline-block;
+									height:95%;
+
 			}
 			
 			.evidencesContainer{
@@ -365,6 +377,9 @@
 			display:grid;
 			grid-template-columns: auto auto auto ;
 			justify-content:space-between;
+			}
+			.ghost{
+			line-height:1em;
 			}
 			.ghost:hover:not(.manualdiscounted){
 			text-decoration: underline;
@@ -400,6 +415,8 @@
 			}
 			.ghostInfo{
 			font-size:35px;
+			line-height:1em;
+			min-height:1em;
 			}
 			.label{
 			font-size:14px;
@@ -433,14 +450,16 @@
 			}
 			.timerContainer{
 			position:absolute;
+			font-size:36px;
 			bottom:5px;
 			width:100%;
 			}
 			.timer{
 			text-align:center;
+			height:1em;
 			}
 			.resetButton{
-			font-family:  'Lazy Dog', sans-serif;
+			font-size:inherit;
 			border:1px solid black;
 			background-color:transparent;
 			margin: 0 auto;
@@ -451,7 +470,7 @@
 	</head>
 	
 	<body id="body" onload="bootup()">
-		<div><p class="hidden">.</p></div>
+		<div class="top"></div>
 		<div>
 			<div class="m5"><p class="hidden">.</p></div>
 			<div class="page">
@@ -474,8 +493,8 @@
 					<span class="label" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap"></span><span class="ghostInfo" id="ghostExtra"></span>
 					<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
 				</div>
-				<hr class="line"></hr>
 				<div class="timerContainer">
+				<hr class="line"></hr>
 					<p class="timer" id="timer"></p>
 					<button onclick="resetButton()" class="resetButton">Reset</button>
 				</div>
