@@ -40,14 +40,18 @@ On the left we have the evidence of the ghost values: 0 means it does not have i
 The X means that in that case they are discounted. 
 - (1,0) we have an evidence that the ghost does not have
 - (-1,2) We discounted an evidence the ghost needs
-Empty space means it is no use 
-The question mark means we might need to do something.
+- Empty space means we don't need to do anything
+- The question mark means we might need to do something: A ghost can have evidences hidden which means it will have 2 out of 3.
+
 So in this example we only look at ghosts with 3 evidences and one will be hidden.
 First we look at a ghost that does not have required evidence
-If 2 of their 3 evidences are discounted it means it cannot be that ghost since at least 2 need to be proven.
+If 2+ of their 3 evidences are discounted it means it cannot be that ghost since at least 2 need to be proven.
 Then if a ghost has a required evidence if the 2 evidences that are not required are proven it means it cannot be the ghost
 since there wont be a third proven evidence so the required evidence is impossible, this means it cannot be the ghost.
 The code for this is quite simple: does it have required and is the required evidence unknown then we look. How many correct evidences does it have correct. The max is how many evidences it has - the amount of hidden evidences - 1. 
+
+### Booting up
+Since this game is still actively worked on and updated. (for example the first version of this tool had 6 less ghosts) we need to make sure we can update and add new data easily, for this we save the data of the ghosts in an array and generate the HTML based on that. Same goes for the evidences tho it is unlikely to be changed.
 
 
 ## Personal aspect
