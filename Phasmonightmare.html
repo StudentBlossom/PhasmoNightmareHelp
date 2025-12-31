@@ -2,8 +2,6 @@
 	<head>
 		<title>Phasmo nightmare journal</title>
 		<script>
-			const removedEv=1;
-			let selectedGhost = -1;
 			const ghostData = [
 			//ghost name, evidences(same order), hunt%, speedmode
 			["Banshee",			[1,0,0,1,1,0,0],50,0,"Is always female","The sanity check is for their target, not the average. can only kill their target during the hunt, has a unique paramic/sound recorder response."],
@@ -45,10 +43,12 @@
 			]
 			
 			
-			
+			let removedEv=1;
+			let selectedGhost = -1;
 			
 			let $ = (id) =>{return document.getElementById(id)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
+			let names = (stringname) => {return document.getElementsByName(stringname)}
 			
 			function evidenceClick (element,mode) {				
 				let i=getI(element.id)
@@ -231,7 +231,7 @@
 				}
 			}
 			
-			const beginTimer = -2;
+			let beginTimer = -2;
 			let timerInterval;
 			let timerCounter = beginTimer;
 			
@@ -276,7 +276,27 @@
 					$("ghosts").appendChild(cell)
 				}
 				ghostData.map(ghostHTML)
+				updateEvidenceAmount()
+				updateTimerStart()
 			}
+			
+			function nextPage(){
+				names("page1").forEach((elem)=>{elem.hidden=true})
+				names("page2").forEach((elem)=>{elem.hidden=false})
+				}			
+			function previousPage(){
+				names("page2").forEach((elem)=>{elem.hidden=true})
+				names("page1").forEach((elem)=>{elem.hidden=false})
+			}
+			function updateEvidenceAmount(){
+				removedEv = 3- $("evidenceAmountSlider").value
+				$("evidenceAmount").innerText=$("evidenceAmountSlider").value
+				}
+			function updateTimerStart () {
+				beginTimer=$("timerStart").value
+				}
+				
+			
 			
 		</script>
 		<style>
@@ -317,16 +337,20 @@
 			margin-left:4%;
 			margin-right:4%;
 			height:90%;
-						grid-template-columns: 1fr 2% 1fr;
-
+			grid-template-columns: 1fr 2% 1fr;
+			
 			}
 			
 			.page{
 			background-size: 40px 40px;
+			background-position: right 25px top;
 			background-color:var(--pageBG);
 			background-image:
 			linear-gradient(to right, gray 1px, transparent 1px),
 			linear-gradient(to bottom, gray 1px, transparent 1px);
+			padding-left:2px;
+			padding-right:2px;
+			position:relative;
 			}
 			
 			.page.left{
@@ -336,7 +360,6 @@
 			
 			.page.right{
 			border-left:2px var(--pageBG) solid;
-			position:relative;
 			}
 			
 			.m2{
@@ -372,6 +395,7 @@
 			color:green;
 			}
 			.manualdiscounted{
+			color:dimgray;
 			text-decoration: line-through;
 			}
 			
@@ -402,7 +426,7 @@
 			}
 			
 			.discounted{
-			color:gray;
+			color:darkgray;
 			animation-name: discounted;
 			animation-duration: 0.3s;
 			}
@@ -439,7 +463,7 @@
 			.cornerContainer{
 			position:relative;
 			}
-			.corner{
+			.rightCorner{
 			position:absolute;
 			bottom:0;
 			right:0;
@@ -448,6 +472,18 @@
 			border-top:5px solid #FEF2C4;
 			border-left:50px solid #FEF2C4;
 			border-right:0px solid transparent;
+			width:0;
+			height:0;
+			}		
+			.leftCorner{
+			position:absolute;
+			bottom:0;
+			left:-2;
+			background:transparent;
+			border-bottom:50px solid #A8906B;
+			border-top:5px solid #FEF2C4;
+			border-left:0px solid transparent;
+			border-right:50px solid #FEF2C4;
 			width:0;
 			height:0;
 			}
@@ -469,21 +505,58 @@
 			display: block;
 			}
 			
+			
+			.settingsContainer{
+			display:grid;
+			grid-template-columns: max-content 1% auto;
+			}
+			.settingslabel{
+			font-size:24px;
+			margin-top:1px;
+			padding-right:1px;
+			font-style: italic;
+			text-align:right;
+			}
+			
 		</style>
 	</head>
 	
 	<body id="body" onload="bootup()">
 		<div class="pageContainer">
-				<div class="page">
+			<div class="page left">
+				<div name="page1">
 					<h1>Evidences</h1>
 					<hr class="line"></hr>
 					<div id="evidences" class="evidencesContainer"></div>
 					<hr class="line"></hr>
 					<div id="ghosts" class="ghostContainer"></div>
-					
 				</div>
-				<div class="m2"></div>
-				<div class="page right"> 
+				
+				<div name="page2" hidden>
+					<div class="settingsContainer">
+						<span class="settingsLabel">Timer start:</span>
+						<span></span>
+						<input type="number" value="-2" onchange="updateTimerStart()" id="timerStart"></input>
+						
+						<span class="settingsLabel">How many evidences:<span id="evidenceAmount">2</span></span>
+						<span></span>
+						<input type="range" min="0" max="3" value="2" onchange="updateEvidenceAmount()" id="evidenceAmountSlider">
+						
+						<span class="settingsLabel">Link to the maps</span>
+						<span></span>
+						<a href="https://phasmo.karotte.org/" target="_blank">map site</a>
+						
+						<button onclick="previousPage()" class="leftCorner"></button>
+					</div><!-- end page2 -->
+					
+					
+				</div><!-- end page left-->
+				
+				
+			</div>
+			<div class="m2"></div>
+			<div class="page right"> 
+				<div name="page1">
 					<h1> Ghost</h1>
 					<hr class="line"></hr>
 					<div class="ghostInfoCOntainer">
@@ -493,15 +566,23 @@
 						<span class="label">evidences: </span><span></span><span class="ghostInfo ghostEvidences" id="ghostEvidences"></span>
 						<span class="label" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap"></span><span class="ghostInfo" id="ghostExtra"></span>
 						<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
-					</div>
+					</div><!-- end ghostinfo container -->
 					<div class="timerContainer">
 						<hr class="line"></hr>
 						<p class="timer" id="timer"></p>
 						<button onclick="resetButton()" class="resetButton">Reset</button>
 					</div>
-					<button onclick="showInfo()" class="corner"></button>				
-			</div>
-		</div>
+					<button onclick="nextPage()" class="rightCorner" title="Click here for the next page (settings)"></button>
+				</div><!-- end page1 -->
+				<div name="page2">
+					
+					
+				</div><!-- end page2 -->
+				
+				
+			</div><!-- end page right -->
+			
+		</div><!-- end pagecontainer -->
 		
 	</body>
 </html>	
