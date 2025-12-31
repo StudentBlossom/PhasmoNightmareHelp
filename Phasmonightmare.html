@@ -12,7 +12,7 @@
 			["Demon",			[0,1,0,0,1,1,0],100,0,"","hunt cooldown and smudgings prevention are shorter, crucifix range is 50% larger."],
 			["Gallu",			[0,0,1,0,1,0,1],60,2,"","very inconsistent ghost: has 3 states that cause hunt%, speed, incense duration, and crucifix range to be different."],
 			["Goryo",			[2,0,1,0,1,0,0],50,0,"Cannot change favourite ghost room","Dots will only be visible on video, won't roam far."],
-			["Hantu",			[0,0,0,1,1,2,0],50,1,"Cannot turn on the fusebox","Speed is based on temperature of the room, has freezing breath clouds during hunts."],
+			["Hantu",			[0,0,0,1,1,2,0],50,3,"Cannot turn on the fusebox","Speed is based on temperature of the room, has freezing breath clouds during hunts."],
 			["Jinn",			[0,0,1,0,1,1,0],50,2,"","Cannot turn off the fusebox, has abilities that work if  the fuse box is on, such as: speed based on LOS and distance, sanity lowering ability that generates EMF."],
 			["Mare",			[0,1,0,1,0,0,1],60,0,"","Hunt% lower if the light is on, cannot turn on the lights, has a chance to instantly turn off a light someone turned on, likes the lightshatter event and turning off the lights."],
 			["Moroi",			[0,1,0,0,0,1,2],50,1,"Longer incense blinding duration","Speed is based on average sanity, can be the fastest ghost, hearing it(box,recorder,paramic) curses the player with higher sanity drain always."],
@@ -27,8 +27,8 @@
 			["Revenant",		[0,1,0,1,0,1,0],50,2,"","Its speed starts slow but instantly becomes really fast when it sees you."],
 			["Shade",			[0,1,1,0,0,1,0],35,0,"","It cannot do hunts,interactions or events while in the same room as a player."],
 			["Spirit",			[0,1,1,0,0,0,1],50,0,"Smudging the room last twice as long",""],
-			["Thaye",			[1,1,0,1,0,0,0],75,1,"","Becomes weaker over time if the player is in the same room or closeby, becomes really slow and low hunt% at the end."],
-			["The_Mimic",		[0,0,0,2,1,1,1],50,0,"","It mimics other ghosts and theyre secondary evidences and behaviours."],
+			["Thaye",			[1,1,0,1,0,0,0],75,3,"","Becomes weaker over time if the player is in the same room or closeby, becomes really slow and low hunt% at the end."],
+			["The_Mimic",		[0,0,0,2,1,1,1],50,0,"","It mimics other ghosts and their secondary evidences and behaviours."],
 			["The_Twins",		[0,0,1,0,0,1,1],50,2,"Is not actually 2 ghosts","Speed depends on which version hunts, fast ghost spawns far away, can do double interactions far apart within seconds of eachother"],
 			["Wraith",			[1,0,1,0,0,0,1],50,0,"can't step in salt","Can teleport to player and that leaves EMF."],
 			["Yokai",			[1,0,0,1,0,0,1],80,0,"","When closeby and talking it increases hunt% and interactionrate, during hunts it has small voice/electronic detection range."],
@@ -43,6 +43,9 @@
 			["freezing",0],
 			["box",0]
 			]
+			
+			
+			
 			
 			let $ = (id) =>{return document.getElementById(id)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
@@ -63,8 +66,6 @@
 				}
 				discountGhosts(evidences,ghostData)
 			}
-			
-			
 			
 			function ghostInfo(id){
 				clearSelectedGhost();
@@ -127,7 +128,7 @@
 						element.classList.add("proof")
 						} else if(evidences[id][1]==-1){
 						element.classList.add("manualdiscounted")						
-						}
+					}
 					$("ghostEvidences").appendChild(element)
 				}
 				
@@ -310,8 +311,17 @@
 			display:none;			
 			}
 			
+			.pageContainer {
+			display: grid;
+			margin-top:2%;
+			margin-left:4%;
+			margin-right:4%;
+			height:90%;
+						grid-template-columns: 1fr 2% 1fr;
+
+			}
+			
 			.page{
-			width:47%;
 			background-size: 40px 40px;
 			background-color:var(--pageBG);
 			background-image:
@@ -329,15 +339,8 @@
 			position:relative;
 			}
 			
-			.m5{
-			width:2%;
-			}
 			.m2{
-			width:2%;
 			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
-			}
-			.top{
-			height:2%;
 			}
 			
 			.line{
@@ -352,8 +355,8 @@
 			.m5, .m2, .page{
 			float:left;
 			display:inline-block;
-									height:95%;
-
+			height:95%;
+			
 			}
 			
 			.evidencesContainer{
@@ -470,37 +473,35 @@
 	</head>
 	
 	<body id="body" onload="bootup()">
-		<div class="top"></div>
-		<div>
-			<div class="m5"><p class="hidden">.</p></div>
-			<div class="page">
-				<h1>Evidences</h1>
-				<hr class="line"></hr>
-				<div id="evidences" class="evidencesContainer"></div>
-				<hr class="line"></hr>
-				<div id="ghosts" class="ghostContainer"></div>
-				
-			</div>
-			<div class="m2"><p class="hidden">.</p></div>
-			<div class="page right"> 
-				<h1> Ghost</h1>
-				<hr class="line"></hr>
-				<div class="ghostInfoCOntainer">
-					<span class="label">Ghost: </span><span></span><span class="ghostInfo" ><a id="ghostLink" target="_blank" href="https://phasmophobia.fandom.com/wiki/"></a></span>
-					<span class="label" title="highest percentage it can be">Hunt%: </span><span></span><span class="ghostInfo" id="ghostHunt"></span>
-					<span class="label" title="without LOS or player">Speed: </span><span></span><span class="ghostInfo" id="ghostSpeed"></span>
-					<span class="label">evidences: </span><span></span><span class="ghostInfo ghostEvidences" id="ghostEvidences"></span>
-					<span class="label" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap"></span><span class="ghostInfo" id="ghostExtra"></span>
-					<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
+		<div class="pageContainer">
+				<div class="page">
+					<h1>Evidences</h1>
+					<hr class="line"></hr>
+					<div id="evidences" class="evidencesContainer"></div>
+					<hr class="line"></hr>
+					<div id="ghosts" class="ghostContainer"></div>
+					
 				</div>
-				<div class="timerContainer">
-				<hr class="line"></hr>
-					<p class="timer" id="timer"></p>
-					<button onclick="resetButton()" class="resetButton">Reset</button>
-				</div>
-				<button onclick="showInfo()" class="corner"></button>				
+				<div class="m2"></div>
+				<div class="page right"> 
+					<h1> Ghost</h1>
+					<hr class="line"></hr>
+					<div class="ghostInfoCOntainer">
+						<span class="label">Ghost: </span><span></span><span class="ghostInfo" ><a id="ghostLink" target="_blank" href="https://phasmophobia.fandom.com/wiki/"></a></span>
+						<span class="label" title="highest percentage it can be">Hunt%: </span><span></span><span class="ghostInfo" id="ghostHunt"></span>
+						<span class="label" title="without LOS or player">Speed: </span><span></span><span class="ghostInfo" id="ghostSpeed"></span>
+						<span class="label">evidences: </span><span></span><span class="ghostInfo ghostEvidences" id="ghostEvidences"></span>
+						<span class="label" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap"></span><span class="ghostInfo" id="ghostExtra"></span>
+						<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
+					</div>
+					<div class="timerContainer">
+						<hr class="line"></hr>
+						<p class="timer" id="timer"></p>
+						<button onclick="resetButton()" class="resetButton">Reset</button>
+					</div>
+					<button onclick="showInfo()" class="corner"></button>				
 			</div>
-			<div class="m5"><p class="hidden">.</p></div>
 		</div>
+		
 	</body>
 </html>	
