@@ -1,6 +1,7 @@
 <html lang="en">
 	<head>
 		<title>Phasmo nightmare journal</title>
+		<link rel="icon" type="image/x-icon" href="https://images.squarespace-cdn.com/content/v1/63d13453310bdc0e36fc5d1b/582665a7-1b72-4fec-9f89-713d78191aa5/favicon.ico">
 		<script>
 			const ghostData = [
 			//ghost name, evidences(same order), hunt%, speedmode
@@ -42,7 +43,6 @@
 			["box",0]
 			]
 			
-			
 			let removedEv=1;
 			let selectedGhost = -1;
 			
@@ -65,6 +65,9 @@
 					evidences[i][1]=0;							
 				}
 				discountGhosts(evidences,ghostData)
+				if(selectedGhost>-1){
+					setInfoEvidence(ghostData[selectedGhost][1])
+					}
 			}
 			
 			function ghostInfo(id){
@@ -111,32 +114,8 @@
 				$("ghostLink").href="https://phasmophobia.fandom.com/wiki/"+data[0]
 				$("ghostHunt").innerText=data[1];
 				$("ghostSpeed").innerText=data[2];
-				$("ghostEvidences").innerHTML=""
+				setInfoEvidence(data[3])
 				
-				function addEvidences(id,required){
-					
-					
-					let element= document.createElement("span")
-					let innerText = document.createTextNode(evidences[id][0]+", ");
-					element.appendChild(innerText)
-					
-					element.classList.add("ghostEvidenceList")
-					if(required){
-						element.classList.add("ghostEvidenceListRequired")						
-					}
-					if(evidences[id][1]==1){
-						element.classList.add("proof")
-						} else if(evidences[id][1]==-1){
-						element.classList.add("manualdiscounted")						
-					}
-					$("ghostEvidences").appendChild(element)
-				}
-				
-				for(let i=0;i<data[3].length;i++){
-					if(data[3][i]>0){
-						addEvidences(i,(data[3][i]==2))
-					}
-				}
 				if(data[4]==""){
 					$("ghostExtraLabel").classList.add("none")
 					$("ghostExtra").classList.add("none")
@@ -148,6 +127,42 @@
 				}
 				$("ghostExtra").innerText=data[4]
 				$("ghostInDepth").innerText=data[5]
+			}
+			
+			function setInfoEvidence(ghostEvidenceArray){
+				$("ghostEvidences").innerHTML=""
+				let addComma = false;
+				function addEvidences(id,required){
+					let element= document.createElement("span")
+					if(addComma){
+					let comma = document.createElement("span")
+					comma.classList.add("comma")	
+					let commaText = document.createTextNode(", ")
+					comma.appendChild(commaText)
+					$("ghostEvidences").appendChild(comma)
+						} else {
+						addComma=true;
+						}
+					
+					let innerText = document.createTextNode(evidences[id][0]);
+					element.appendChild(innerText)					
+					element.classList.add("ghostEvidenceList")
+					if(required){
+						element.classList.add("ghostEvidenceListRequired")						
+					}
+					if(evidences[id][1]==1){
+						element.classList.add("proof")
+						} else if(evidences[id][1]==-1){
+						element.classList.add("manualdiscounted")						
+					}
+					$("ghostEvidences").appendChild(element)
+				}
+
+				for(let i=0;i<ghostEvidenceArray.length;i++){
+					if(ghostEvidenceArray[i]>0){
+						addEvidences(i,(ghostEvidenceArray[i]==2))
+					}
+				}
 			}
 			
 			const reqEv=2
@@ -246,6 +261,26 @@
 				$("timer").innerText=timerCounter++;
 			}
 			
+			
+			function nextPage(){
+				names("page1").forEach((elem)=>{elem.hidden=true})
+				names("page2").forEach((elem)=>{elem.hidden=false})
+			}			
+			function previousPage(){
+				names("page2").forEach((elem)=>{elem.hidden=true})
+				names("page1").forEach((elem)=>{elem.hidden=false})
+			}
+			
+			function updateEvidenceAmount(){
+				removedEv = 3- $("evidenceAmountSlider").value
+				$("evidenceAmount").innerText=$("evidenceAmountSlider").value
+				discountGhosts(evidences,ghostData)
+				
+			}
+			function updateTimerStart () {
+				beginTimer=$("timerStart").value
+			}
+			
 			function bootup (){
 				//disable right click popup
 				document.addEventListener('contextmenu', event => event.preventDefault());
@@ -280,22 +315,6 @@
 				updateTimerStart()
 			}
 			
-			function nextPage(){
-				names("page1").forEach((elem)=>{elem.hidden=true})
-				names("page2").forEach((elem)=>{elem.hidden=false})
-				}			
-			function previousPage(){
-				names("page2").forEach((elem)=>{elem.hidden=true})
-				names("page1").forEach((elem)=>{elem.hidden=false})
-			}
-			function updateEvidenceAmount(){
-				removedEv = 3- $("evidenceAmountSlider").value
-				$("evidenceAmount").innerText=$("evidenceAmountSlider").value
-				}
-			function updateTimerStart () {
-				beginTimer=$("timerStart").value
-				}
-				
 			
 			
 		</script>
@@ -308,8 +327,9 @@
 			margin:0px;
 			padding:0px;
 			font-family:  'Lazy Dog', sans-serif;
-			--			font-size: 16px;
 			--pageBG: #F8F3CB;
+			--darkPage: #A8906B;
+			--lightPage: #FEF2C4;
 			-webkit-touch-callout: none;
 			-webkit-user-select: none;
 			-khtml-user-select: none;
@@ -317,13 +337,19 @@
 			-ms-user-select: none;
 			user-select: none;
 			}
-			h1{
-			font-size:36px;
-			}
-			
 			body{
 			background-color:black;
 			}
+			
+			h1{
+			font-size:36px;
+			}
+			.subhead{
+			color:dimgray;
+			font-style:italic;
+			font-size:12px;
+			}
+			
 			.hidden{
 			visibility:hidden;
 			}
@@ -338,7 +364,6 @@
 			margin-right:4%;
 			height:90%;
 			grid-template-columns: 1fr 2% 1fr;
-			
 			}
 			
 			.page{
@@ -348,21 +373,16 @@
 			background-image:
 			linear-gradient(to right, gray 1px, transparent 1px),
 			linear-gradient(to bottom, gray 1px, transparent 1px);
-			padding-left:2px;
-			padding-right:2px;
+			padding-top:5px;
+			padding-left:3px;
+			padding-right:3px;
 			position:relative;
-			}
-			
-			.page.left{
 			border-right:2px var(--pageBG) solid;
-			border-left:2px var(--pageBG) solid;
-			}
-			
-			.page.right{
-			border-left:2px var(--pageBG) solid;
+			border-left:2px var(--pageBG) solid;			
 			}
 			
 			.m2{
+			height:100%;
 			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
 			}
 			
@@ -372,14 +392,6 @@
 			width:90%;
 			margin-left:5%;
 			margin-right:5%;
-			}
-			
-			
-			.m5, .m2, .page{
-			float:left;
-			display:inline-block;
-			height:95%;
-			
 			}
 			
 			.evidencesContainer{
@@ -458,7 +470,11 @@
 			}
 			.ghostEvidenceListRequired{
 			font-weight:bold;
+			border-left: 1px solid black;
+			border-right: 1px solid black;
+			border-radius: 100%;
 			}
+			
 			
 			.cornerContainer{
 			position:relative;
@@ -466,11 +482,11 @@
 			.rightCorner{
 			position:absolute;
 			bottom:0;
-			right:0;
+			right:-2;
 			background:transparent;
-			border-bottom:50px solid #A8906B;
-			border-top:5px solid #FEF2C4;
-			border-left:50px solid #FEF2C4;
+			border-bottom:50px solid var(--darkPage);
+			border-top:5px solid var(--lightPage);
+			border-left:50px solid var(--lightPage);
 			border-right:0px solid transparent;
 			width:0;
 			height:0;
@@ -480,10 +496,10 @@
 			bottom:0;
 			left:-2;
 			background:transparent;
-			border-bottom:50px solid #A8906B;
-			border-top:5px solid #FEF2C4;
+			border-bottom:50px solid var(--darkPage);
+			border-top:5px solid var(--lightPage);
 			border-left:0px solid transparent;
-			border-right:50px solid #FEF2C4;
+			border-right:50px solid var(--lightPage);
 			width:0;
 			height:0;
 			}
@@ -508,7 +524,7 @@
 			
 			.settingsContainer{
 			display:grid;
-			grid-template-columns: max-content 1% auto;
+			grid-template-columns: max-content 2% auto;
 			}
 			.settingslabel{
 			font-size:24px;
@@ -516,6 +532,65 @@
 			padding-right:1px;
 			font-style: italic;
 			text-align:right;
+			}
+
+			#evidenceAmount {
+			display:inline-block;
+			width:1ch;
+			}
+			.settingInfo{
+			font-size:24px;
+			}
+			.number {
+			border: 1px dotted var(--darkPage);
+			background: transparent;
+			text-align:center;
+			width:7ch;
+			}
+			.number::-webkit-inner-spin-button {
+			opacity: 1;
+			}
+			
+			.slider{
+			-webkit-appearance: none;
+			outline: none;
+			border: 0px solid transparent;
+			border-radius:1em;
+			opacity: 1;
+			width: 100%;
+			height: 1em;
+			margin: auto;
+			background:  
+			conic-gradient(
+			var(--pageBG) 0 0.125turn,
+			transparent 0.126turn 0.874turn,
+			var(--pageBG) 0.875turn 1turn),
+			conic-gradient(
+			transparent 0 0.375turn,
+			var(--pageBG) 0.376turn 0.624turn,
+			transparent 0.625turn 1turn) 0.5em 0px,
+			black;
+			background-size: 1em 1em;
+			cursor: pointer;
+			}
+			
+			.slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 1em;
+			height: 2em;
+			border-radius:1em;
+			background: black;
+			cursor: pointer;
+			}
+			.text{
+			font-size:20px;
+			}
+			
+			.copyright{
+			position:absolute;
+			bottom:0;
+			right:0;
 			}
 			
 		</style>
@@ -533,18 +608,20 @@
 				</div>
 				
 				<div name="page2" hidden>
+					<h1>Settings:</h1>
+					<hr class="line"></hr>
 					<div class="settingsContainer">
 						<span class="settingsLabel">Timer start:</span>
 						<span></span>
-						<input type="number" value="-2" onchange="updateTimerStart()" id="timerStart"></input>
+						<input type="number" class="number" value="-2" onchange="updateTimerStart()" id="timerStart"></input>
 						
 						<span class="settingsLabel">How many evidences:<span id="evidenceAmount">2</span></span>
 						<span></span>
-						<input type="range" min="0" max="3" value="2" onchange="updateEvidenceAmount()" id="evidenceAmountSlider">
+						<input type="range" class="slider" min="0" max="3" value="2" onchange="updateEvidenceAmount()" id="evidenceAmountSlider">
 						
 						<span class="settingsLabel">Link to the maps</span>
 						<span></span>
-						<a href="https://phasmo.karotte.org/" target="_blank">map site</a>
+						<p><a class="settingInfo" href="https://phasmo.karotte.org/" target="_blank">map site</a></p>
 						
 						<button onclick="previousPage()" class="leftCorner"></button>
 					</div><!-- end page2 -->
@@ -564,18 +641,28 @@
 						<span class="label" title="highest percentage it can be">Hunt%: </span><span></span><span class="ghostInfo" id="ghostHunt"></span>
 						<span class="label" title="without LOS or player">Speed: </span><span></span><span class="ghostInfo" id="ghostSpeed"></span>
 						<span class="label">evidences: </span><span></span><span class="ghostInfo ghostEvidences" id="ghostEvidences"></span>
-						<span class="label" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap"></span><span class="ghostInfo" id="ghostExtra"></span>
+						<span class="label none" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap" class="none"></span><span class="ghostInfo none" id="ghostExtra"></span>
 						<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
 					</div><!-- end ghostinfo container -->
 					<div class="timerContainer">
 						<hr class="line"></hr>
 						<p class="timer" id="timer"></p>
-						<button onclick="resetButton()" class="resetButton">Reset</button>
+						<button onclick="resetButton()" class="resetButton" autofocus>Reset</button>
 					</div>
 					<button onclick="nextPage()" class="rightCorner" title="Click here for the next page (settings)"></button>
 				</div><!-- end page1 -->
-				<div name="page2">
+				<div name="page2" hidden>
+					<h1>Made by Blossom</h1>
+					<div class="subhead">No AI used</div>
+					<a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main" target="_blank">Github page</a> 
+					<a href="https://www.youtube.com/@missblossom9102" target="_blank">Youtube page</a> <br>
 					
+					<span class="text">For more info read the githubpage readme. <br>
+					Made with love, have fun ghost identifying!</span>
+					<div class="copyright">
+						<hr class="line"></hr>
+						<a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main">Single page Phasmo nightmare journal</a> © 2025 by <a href="https://www.youtube.com/@missblossom9102">Blossom studios</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+					</div>
 					
 				</div><!-- end page2 -->
 				
