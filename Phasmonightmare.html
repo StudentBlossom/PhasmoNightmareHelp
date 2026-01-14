@@ -5,33 +5,33 @@
 		<script>
 			const ghostData = [
 			//ghost name, evidences(same order), hunt%, speedmode
-			["Banshee",			[1,0,0,1,1,0,0],50,0,"Is always female","The sanity check is for their target, not the average. can only kill their target during the hunt, has a unique paramic/sound recorder response."],
-			["Dayan", 			[0,0,1,1,0,0,1],65,2,"Is always female","huntspeed depends on if a closeby player is moving or not. Also hunt% is based on closebyplayer movement."	],
-			["Deogen",			[1,1,0,0,0,0,2],40,3,"has a unique spiritbox response","Always has LOS during hunt, becomes real slow when closeby but really fast otherwise, more visible during hunts."],
-			["Demon",			[0,1,0,0,1,1,0],100,0,"","hunt cooldown and smudgings prevention are shorter, crucifix range is 50% larger."],
-			["Gallu",			[0,0,1,0,1,0,1],60,2,"","very inconsistent ghost: has 3 states that cause hunt%, speed, incense duration, and crucifix range to be different."],
-			["Goryo",			[2,0,1,0,1,0,0],50,0,"Cannot change favourite ghost room","Dots will only be visible on video, won't roam far."],
-			["Hantu",			[0,0,0,1,1,2,0],50,3,"Cannot turn on the fusebox","Speed is based on temperature of the room, has freezing breath clouds during hunts."],
-			["Jinn",			[0,0,1,0,1,1,0],50,2,"","Cannot turn off the fusebox, has abilities that work if  the fuse box is on, such as: speed based on LOS and distance, sanity lowering ability that generates EMF."],
-			["Mare",			[0,1,0,1,0,0,1],60,0,"","Hunt% lower if the light is on, cannot turn on the lights, has a chance to instantly turn off a light someone turned on, likes the lightshatter event and turning off the lights."],
-			["Moroi",			[0,1,0,0,0,1,2],50,1,"Longer incense blinding duration","Speed is based on average sanity, can be the fastest ghost, hearing it(box,recorder,paramic) curses the player with higher sanity drain always."],
-			["Myling",			[0,1,1,0,1,0,0],50,0,"","Footsteps sound are quieter and the range is smaller."],
-			["Obake",			[0,0,1,1,2,0,0],50,0,"Can be a different ghost model for a single blink during hunts","Has a chance of not leaving UV-prints, a chance to have an extra finger on UV-prints, and a chance to make UV-prints last shorter."],
-			["Obambo",			[1,1,0,0,1,0,0],65,2,"","Hunt% and speed are based on it's state which switches every 2 mins, can happen during hunts, hunts can be 20% shorter then normal if it starts in aggressive state."],
-			["Oni",				[1,0,1,0,0,1,0],50,0,"Cannot do mistbal events","is more visible during hunts and is more active if a player is in the room."],
-			["Onryo",			[0,0,0,1,0,1,1],60,0,"","Uses candles as crucifix over a crucifix, every third flame it put out will try to a hunt (with delay), lit fire also lowers hunt%."],
-			["Phantom",			[1,0,0,0,1,0,1],50,0,"","Is more invisble during hunts,if a photo is taken during an event/dots the ghost model will dissapear from view and the photo and the photo won't have distortion, it can roam to a player and will leave an EMF when it arrives."],
-			["Poltergeist",		[0,1,0,0,1,0,1],50,0,"","Will throw an item every .5 seconds during a hunt if possible, can throw multiple nearby items at the same time which leaves an EMF 2."],
-			["Raiju",			[1,0,1,1,0,0,0],65,1,"Heartbeats are louder and have bigger range","Electronics raise its speed and hunting% and it's interference range is bigger."],
-			["Revenant",		[0,1,0,1,0,1,0],50,2,"","Its speed starts slow but instantly becomes really fast when it sees you."],
-			["Shade",			[0,1,1,0,0,1,0],35,0,"","It cannot do hunts,interactions or events while in the same room as a player."],
-			["Spirit",			[0,1,1,0,0,0,1],50,0,"Smudging the room last twice as long",""],
-			["Thaye",			[1,1,0,1,0,0,0],75,3,"","Becomes weaker over time if the player is in the same room or closeby, becomes really slow and low hunt% at the end."],
-			["The_Mimic",		[0,0,0,2,1,1,1],50,0,"","It mimics other ghosts and their secondary evidences and behaviours."],
-			["The_Twins",		[0,0,1,0,0,1,1],50,2,"Is not actually 2 ghosts","Speed depends on which version hunts, fast ghost spawns far away, can do double interactions far apart within seconds of eachother"],
-			["Wraith",			[1,0,1,0,0,0,1],50,0,"can't step in salt","Can teleport to player and that leaves EMF."],
-			["Yokai",			[1,0,0,1,0,0,1],80,0,"","When closeby and talking it increases hunt% and interactionrate, during hunts it has small voice/electronic detection range."],
-			["Yurei",			[1,0,0,1,0,1,0],50,0,"After smudging to prevent hunts it wont roam from its favourite room","Can close doors smoothly as event, even exit doors."]
+			createGhostObject("Banshee",		[1,0,0,1,1,0,0],50,0,"Is always female","The sanity check is for their target, not the average. can only kill their target during the hunt, has a unique paramic/sound recorder response."),
+			createGhostObject("Dayan", 			[0,0,1,1,0,0,1],65,2,"Is always female","huntspeed depends on if a closeby player is moving or not. Also hunt% is based on closebyplayer movement."	),
+			createGhostObject("Deogen",			[1,1,0,0,0,0,2],40,3,"has a unique spiritbox response","Always has LOS during hunt, becomes real slow when closeby but really fast otherwise, more visible during hunts."),
+			createGhostObject("Demon",			[0,1,0,0,1,1,0],100,0,"","hunt cooldown and smudgings prevention are shorter, crucifix range is 50% larger."),
+			createGhostObject("Gallu",			[0,0,1,0,1,0,1],60,2,"","very inconsistent ghost: has 3 states that cause hunt%, speed, incense duration, and crucifix range to be different."),
+			createGhostObject("Goryo",			[2,0,1,0,1,0,0],50,0,"Cannot change favourite ghost room","Dots will only be visible on video, won't roam far."),
+			createGhostObject("Hantu",			[0,0,0,1,1,2,0],50,3,"Cannot turn on the fusebox","Speed is based on temperature of the room, has freezing breath clouds during hunts."),
+			createGhostObject("Jinn",			[0,0,1,0,1,1,0],50,2,"","Cannot turn off the fusebox, has abilities that work if  the fuse box is on, such as: speed based on LOS and distance, sanity lowering ability that generates EMF."),
+			createGhostObject("Mare",			[0,1,0,1,0,0,1],60,0,"","Hunt% lower if the light is on, cannot turn on the lights, has a chance to instantly turn off a light someone turned on, likes the lightshatter event and turning off the lights."),
+			createGhostObject("Moroi",			[0,1,0,0,0,1,2],50,1,"Longer incense blinding duration","Speed is based on average sanity, can be the fastest ghost, hearing it(box,recorder,paramic) curses the player with higher sanity drain always."),
+			createGhostObject("Myling",			[0,1,1,0,1,0,0],50,0,"","Footsteps sound are quieter and the range is smaller."),
+			createGhostObject("Obake",			[0,0,1,1,2,0,0],50,0,"Can be a different ghost model for a single blink during hunts","Has a chance of not leaving UV-prints, a chance to have an extra finger on UV-prints, and a chance to make UV-prints last shorter."),
+			createGhostObject("Obambo",			[1,1,0,0,1,0,0],65,2,"","Hunt% and speed are based on it's state which switches every 2 mins, can happen during hunts, hunts can be 20% shorter then normal if it starts in aggressive state."),
+			createGhostObject("Oni",			[1,0,1,0,0,1,0],50,0,"Cannot do mistbal events","is more visible during hunts and is more active if a player is in the room."),
+			createGhostObject("Onryo",			[0,0,0,1,0,1,1],60,0,"","Uses candles as crucifix over a crucifix, every third flame it put out will try to a hunt (with delay), lit fire also lowers hunt%."),
+			createGhostObject("Phantom",		[1,0,0,0,1,0,1],50,0,"","Is more invisble during hunts,if a photo is taken during an event/dots the ghost model will dissapear from view and the photo and the photo won't have distortion, it can roam to a player and will leave an EMF when it arrives."),
+			createGhostObject("Poltergeist",	[0,1,0,0,1,0,1],50,0,"","Will throw an item every .5 seconds during a hunt if possible, can throw multiple nearby items at the same time which leaves an EMF 2."),
+			createGhostObject("Raiju",			[1,0,1,1,0,0,0],65,1,"Heartbeats are louder and have bigger range","Electronics raise its speed and hunting% and it's interference range is bigger."),
+			createGhostObject("Revenant",		[0,1,0,1,0,1,0],50,2,"","Its speed starts slow but instantly becomes really fast when it sees you."),
+			createGhostObject("Shade",			[0,1,1,0,0,1,0],35,0,"","It cannot do hunts,interactions or events while in the same room as a player."),
+			createGhostObject("Spirit",			[0,1,1,0,0,0,1],50,0,"Smudging the room last twice as long",""),
+			createGhostObject("Thaye",			[1,1,0,1,0,0,0],75,3,"","Becomes weaker over time if the player is in the same room or closeby, becomes really slow and low hunt% at the end."),
+			createGhostObject("The_Mimic",		[0,0,0,2,1,1,1],50,0,"","It mimics other ghosts and their secondary evidences and behaviours."),
+			createGhostObject("The_Twins",		[0,0,1,0,0,1,1],50,2,"Is not actually 2 ghosts","Speed depends on which version hunts, fast ghost spawns far away, can do double interactions far apart within seconds of eachother"),
+			createGhostObject("Wraith",			[1,0,1,0,0,0,1],50,0,"can't step in salt","Can teleport to player and that leaves EMF."),
+			createGhostObject("Yokai",			[1,0,0,1,0,0,1],80,0,"","When closeby and talking it increases hunt% and interactionrate, during hunts it has small voice/electronic detection range."),
+			createGhostObject("Yurei",			[1,0,0,1,0,1,0],50,0,"After smudging to prevent hunts it wont roam from its favourite room","Can close doors smoothly as event, even exit doors.")
 			]
 			
 			const evidences = [
@@ -44,13 +44,65 @@
 			["box",0]
 			]
 			
-			let removedEv=1;
-			let selectedGhost = -1;
-			
 			let $ = (id) =>{return document.getElementById(id)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
 			let names = (stringname) => {return document.getElementsByName(stringname)}
 			
+			let removedEv=1;
+			let selectedGhost = -1;
+			
+			
+			function createGhostObject (paraName,paraEvidence,paraHunt,paraSpeedTier,paraExtraInfo,paraInfo) {
+				let checkHasExtra = !(paraExtraInfo=="")
+				let checkHuntTier = ""
+				if(paraHunt==50){
+					checkHuntTier="normal"
+					}else if(paraHunt==100){
+					checkHuntTier="always"
+					} else if(paraHunt<40){
+					checkHuntTier="really low"
+					} else if(paraHunt<50){
+					checkHuntTier="low"
+					} else if(paraHunt>70){
+					checkHuntTier="really high"
+					} else if(paraHunt>50){
+					checkHuntTier="high"
+				}
+				
+				let checkSpeedTier = ""
+				switch(paraSpeedTier){
+					case -1:
+					checkSpeedTier="slow"
+					break;
+					case 1:
+					checkSpeedTier="fast"
+					break;
+					case 2:
+					checkSpeedTier="Inconsistent"
+					break;
+					case 3:
+					checkSpeedTier="no LOS speedup"
+					break;
+					case 0:
+					checkSpeedTier="normal"
+					break;
+				}
+				
+				const returnValue = {
+					name: 			paraName.replace('_',' '),
+					link:			paraName,
+					evidence:		paraEvidence,
+					huntTier:		checkHuntTier,
+					huntPercent:	paraHunt,
+					speedTier:		checkSpeedTier,
+					hasExtra:		checkHasExtra,
+					info:			paraInfo
+				}
+				if(checkHasExtra){
+					returnValue.extraInfo=paraExtraInfo
+				}
+				return returnValue;
+			}
 			
 			function evidenceClick (element,mode) {				
 				let i=getI(element.id)
@@ -69,66 +121,36 @@
 				discountGhosts(evidences,ghostData)
 				if(selectedGhost>-1){
 					setInfoEvidence(ghostData[selectedGhost][1])
-					}
+				}
 			}
 			
-			function ghostInfo(id){
+			function setGhostInfo(id) {
 				clearSelectedGhost();
 				selectedGhost=id
-				let data=ghostData[id]
-				let displayData=[data[0],"","",data[1],data[4],data[5]]
-				if(data[2]==50){
-					displayData[1]="normal"
-					}else if(data[2]==100){
-					displayData[1]="always"
-					} else if(data[2]<40){
-					displayData[1]="really low"
-					} else if(data[2]<50){
-					displayData[1]="low"
-					} else if(data[2]>70){
-					displayData[1]="really high"
-					} else if(data[2]>50){
-					displayData[1]="high"
-				}
-				
-				switch(data[3]){
-					case -1:
-					displayData[2]="slow"
-					break;
-					case 1:
-					displayData[2]="fast"
-					break;
-					case 2:
-					displayData[2]="Inconsistent"
-					break;
-					case 3:
-					displayData[2]="no LOS speedup"
-					break;
-					case 0:
-					displayData[2]="normal"
-					break;
-				}
-				setInfo(displayData)
+				let data=ghostData[id]				
+				setInfo(data)
 			}
 			
-			function setInfo(data){
-				$("ghostLink").innerText=data[0]
-				$("ghostLink").href="https://phasmophobia.fandom.com/wiki/"+data[0]
-				$("ghostHunt").innerText=data[1];
-				$("ghostSpeed").innerText=data[2];
-				setInfoEvidence(data[3])
+			function setInfo(data) {
+				$("ghostLink").innerText=data.name
+				$("ghostLink").href="https://phasmophobia.fandom.com/wiki/"+data.link
+				setInfoEvidence(data.evidence)
+				$("ghostHunt").innerText=data.huntTier;
+				$("ghostHunt").title="the max hunt % is "+data.huntPercent
+				$("ghostSpeed").innerText=data.speedTier;
 				
-				if(data[4]==""){
-					$("ghostExtraLabel").classList.add("none")
-					$("ghostExtra").classList.add("none")
-					$("ghostExtraGap").classList.add("none")
-					} else {
+				if(data.hasExtra){
+					$("ghostExtra").innerText=data.extraInfo
 					$("ghostExtraLabel").classList.remove("none")
 					$("ghostExtra").classList.remove("none")
 					$("ghostExtraGap").classList.remove("none")
+					} else {
+					$("ghostExtra").innerText=""
+					$("ghostExtraLabel").classList.add("none")
+					$("ghostExtra").classList.add("none")
+					$("ghostExtraGap").classList.add("none")
 				}
-				$("ghostExtra").innerText=data[4]
-				$("ghostInDepth").innerText=data[5]
+				$("ghostInDepth").innerText=data.info
 			}
 			
 			function setInfoEvidence(ghostEvidenceArray){
@@ -137,14 +159,14 @@
 				function addEvidences(id,required){
 					let element= document.createElement("span")
 					if(addComma){
-					let comma = document.createElement("span")
-					comma.classList.add("comma")	
-					let commaText = document.createTextNode(", ")
-					comma.appendChild(commaText)
-					$("ghostEvidences").appendChild(comma)
+						let comma = document.createElement("span")
+						comma.classList.add("comma")	
+						let commaText = document.createTextNode(", ")
+						comma.appendChild(commaText)
+						$("ghostEvidences").appendChild(comma)
 						} else {
 						addComma=true;
-						}
+					}
 					
 					let innerText = document.createTextNode(evidences[id][0]);
 					element.appendChild(innerText)					
@@ -159,7 +181,7 @@
 					}
 					$("ghostEvidences").appendChild(element)
 				}
-
+				
 				for(let i=0;i<ghostEvidenceArray.length;i++){
 					if(ghostEvidenceArray[i]>0){
 						addEvidences(i,(ghostEvidenceArray[i]==2))
@@ -167,17 +189,17 @@
 				}
 			}
 			
-			const reqEv=2
 			function discountGhosts (evidences,ghostData) {
-				for(let i=0;i<ghostData.length;i++){
+				ghostData.forEach(discountSingleGhost)
+				function discountSingleGhost(entry,id){
 					let hasRequiredEvidence = [false,-1,-1];
 					let isDiscounted = false;
 					let wrongEvidence = 0;
 					let rightEvidence = 0;
 					let amountEvidence = 0;
-					for(let ii=0;ii<evidences.length;ii++){
-						let ghostEv = ghostData[i][1][ii];
-						let curEv = evidences[ii][1]
+					for(let i=0;i<entry.evidence.length;i++){
+						let ghostEv = entry.evidence[i];
+						let curEv = evidences[i][1]
 						
 						if(ghostEv==0){
 							if(curEv==1){
@@ -185,7 +207,7 @@
 								break;
 							}
 						}
-						if(ghostEv==reqEv){
+						if(ghostEv==2){
 							amountEvidence++;
 							hasRequiredEvidence=[true,curEv];
 							if(curEv==-1){
@@ -204,6 +226,7 @@
 							}
 						}
 					}
+					
 					if(wrongEvidence>removedEv){
 						isDiscounted=true;
 					}
@@ -215,11 +238,12 @@
 						}
 					}
 					if(isDiscounted){
-						$("G"+i).classList.add("discounted")
+						$("G"+id).classList.add("discounted")
 						} else {
-						$("G"+i).classList.remove("discounted")
+						$("G"+id).classList.remove("discounted")
 					}
 				}
+				
 			}
 			
 			function clearSelectedGhost (){
@@ -229,8 +253,14 @@
 				selectedGhost=-1;
 			}
 			
+			function clearInfo () {
+				let emptyInfo = createGhostObject("",[],"","","","")
+				emptyInfo.huntTier=""
+				setInfo(emptyInfo)
+			}
+			
 			function resetButton (){
-				setInfo(["","","",[],"",""])
+				clearInfo()
 				clearSelectedGhost()
 				clearManualDiscountAndProof()
 				discountGhosts(evidences,ghostData)
@@ -248,13 +278,12 @@
 				}
 			}
 			
-			let beginTimer = -2;
 			let timerInterval;
-			let timerCounter = beginTimer;
+			let timerCounter;
 			
 			function startTimer () {
 				clearInterval(timerInterval)
-				timerCounter=beginTimer
+				timerCounter=$("timerStart").value
 				timer();
 				timerInterval=setInterval(timer,1000)
 			}
@@ -279,16 +308,13 @@
 				discountGhosts(evidences,ghostData)
 				
 			}
-			function updateTimerStart () {
-				beginTimer=$("timerStart").value
-			}
 			
 			function bootup (){
 				//disable right click popup
 				document.addEventListener('contextmenu', event => event.preventDefault());
-				for(let i=names("selfdestruct").length-1;i>=0;i--){//read SGB
+				for(let i=names("selfdestruct").length-1;i>=0;i--){//TODO write this in SGB, it has to be like this cause the array of elements gets changed when stuff gets removed so it will go wrong if we use a foreach
 					names("selfdestruct")[i].remove()
-					}
+				}
 				//add all evidences
 				function evidenceHTML (entry, iter){
 					let element = document.createElement("span")
@@ -306,18 +332,17 @@
 					let cell = document.createElement("p")
 					cell.classList.add("row"+iter%3)					
 					let element = document.createElement("span")
-					let innerText = document.createTextNode(entry[0]);
+					let innerText = document.createTextNode(entry.name);
 					element.appendChild(innerText)
 					element.id="G"+iter
 					element.classList.add("ghost")
-					element.onclick=function () {this.classList.add("selected");ghostInfo(getI(this.id))}
+					element.onclick=function () {this.classList.add("selected");setGhostInfo(getI(this.id))}
 					element.oncontextmenu=function () {this.classList.toggle("manualdiscounted")}
 					cell.appendChild(element)
 					$("ghosts").appendChild(cell)
 				}
 				ghostData.map(ghostHTML)
 				updateEvidenceAmount()
-				updateTimerStart()
 			}
 			
 			
@@ -538,7 +563,7 @@
 			font-style: italic;
 			text-align:right;
 			}
-
+			
 			#evidenceAmount {
 			display:inline-block;
 			width:1ch;
@@ -607,9 +632,9 @@
 				<div name="page1">
 					<h1>Evidences</h1>
 					<hr class="line"></hr>
-					<div id="evidences" class="evidencesContainer"><div class="selfdestruct" name="selfdestruct"> here the evidence will be</div></div>
+					<div id="evidences" class="evidencesContainer"><div class="selfdestruct evidence" name="selfdestruct"> here the evidence will be</div></div>
 					<hr class="line"></hr>
-					<div id="ghosts" class="ghostContainer"><div class="selfdestruct" name="selfdestruct"> Here will be the ghosts</div></div>
+					<div id="ghosts" class="ghostContainer"><div class="selfdestruct ghost" name="selfdestruct"> Here will be the ghosts</div></div>
 				</div>
 				
 				<div name="page2" hidden>
@@ -618,7 +643,7 @@
 					<div class="settingsContainer">
 						<span class="settingsLabel">Timer start:</span>
 						<span></span>
-						<input type="number" class="number" value="-2" onchange="updateTimerStart()" id="timerStart"></input>
+						<input type="number" class="number" value="-2" id="timerStart"></input>
 						
 						<span class="settingsLabel">How many evidences:<span id="evidenceAmount">2</span></span>
 						<span></span>
@@ -654,6 +679,7 @@
 						<p class="timer" id="timer"></p>
 						<button onclick="resetButton()" class="resetButton" autofocus>Reset</button>
 					</div>
+										
 					<button onclick="nextPage()" class="rightCorner" title="Click here for the next page (settings)"></button>
 				</div><!-- end page1 -->
 				<div name="page2" hidden>
