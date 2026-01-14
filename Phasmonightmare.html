@@ -33,6 +33,7 @@
 			["Yokai",			[1,0,0,1,0,0,1],80,0,"","When closeby and talking it increases hunt% and interactionrate, during hunts it has small voice/electronic detection range."],
 			["Yurei",			[1,0,0,1,0,1,0],50,0,"After smudging to prevent hunts it wont roam from its favourite room","Can close doors smoothly as event, even exit doors."]
 			]
+			
 			const evidences = [
 			["dots",0],
 			["writing",0],
@@ -49,6 +50,7 @@
 			let $ = (id) =>{return document.getElementById(id)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
 			let names = (stringname) => {return document.getElementsByName(stringname)}
+			
 			
 			function evidenceClick (element,mode) {				
 				let i=getI(element.id)
@@ -284,6 +286,9 @@
 			function bootup (){
 				//disable right click popup
 				document.addEventListener('contextmenu', event => event.preventDefault());
+				for(let i=names("selfdestruct").length-1;i>=0;i--){//read SGB
+					names("selfdestruct")[i].remove()
+					}
 				//add all evidences
 				function evidenceHTML (entry, iter){
 					let element = document.createElement("span")
@@ -602,9 +607,9 @@
 				<div name="page1">
 					<h1>Evidences</h1>
 					<hr class="line"></hr>
-					<div id="evidences" class="evidencesContainer"></div>
+					<div id="evidences" class="evidencesContainer"><div class="selfdestruct" name="selfdestruct"> here the evidence will be</div></div>
 					<hr class="line"></hr>
-					<div id="ghosts" class="ghostContainer"></div>
+					<div id="ghosts" class="ghostContainer"><div class="selfdestruct" name="selfdestruct"> Here will be the ghosts</div></div>
 				</div>
 				
 				<div name="page2" hidden>
