@@ -120,7 +120,7 @@
 				}
 				discountGhosts(evidences,ghostData)
 				if(selectedGhost>-1){
-					setInfoEvidence(ghostData[selectedGhost][1])
+					setInfoEvidence(ghostData[selectedGhost].evidence)
 				}
 			}
 			
@@ -623,6 +623,8 @@
 			right:0;
 			}
 			
+			
+			
 		</style>
 	</head>
 	
@@ -672,25 +674,31 @@
 						<span class="label" title="without LOS or player">Speed: </span><span></span><span class="ghostInfo" id="ghostSpeed"></span>
 						<span class="label">evidences: </span><span></span><span class="ghostInfo ghostEvidences" id="ghostEvidences"></span>
 						<span class="label none" id="ghostExtraLabel">Extra: </span><span id="ghostExtraGap" class="none"></span><span class="ghostInfo none" id="ghostExtra"></span>
-						<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth"></span>
+						<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth">Click on the folded corner of this page (bottom right) to read how to use the journal.</span>
 					</div><!-- end ghostinfo container -->
 					<div class="timerContainer">
 						<hr class="line"></hr>
 						<p class="timer" id="timer"></p>
 						<button onclick="resetButton()" class="resetButton" autofocus>Reset</button>
 					</div>
-										
 					<button onclick="nextPage()" class="rightCorner" title="Click here for the next page (settings)"></button>
 				</div><!-- end page1 -->
 				<div name="page2" hidden>
-					<h1>Made by Blossom</h1>
-					<div class="subhead">No AI used</div>
-					<a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main" target="_blank">Github page</a> 
-					<a href="https://www.youtube.com/@missblossom9102" target="_blank">Youtube page</a> <br>
+					<h1>How to:</h1>
+					<hr class="line">
+					<span class="text">
+						By left clicking on an evidence it will be <span class="proof">proven</span> by right clicking while it is <span class="proof">proven</span> it will go back to normal.
+						If you right click an evidence it will be <span class="manualdiscounted">discounted</span> and by left clicking <span class="manualdiscounted">discounted</span> evidence it will go back to normal.
+						<br>By left clicking on a ghost name it's info will appear on the right page, by left clicking a ghost you will <span class="manualdiscounted">manually discount</span> the ghost and by right clicking it again you will make it go back to normal.
+						<br>There are 2 settings. The timer start: This is the number the timer will start at when you click the reset button. How many evidences: This slider is for how many evidences you are playing with. By changing the slider you can make it go between 0 and 3 evidences.
+						<br>What does this page do for you: Aside from providing easy and accurate to digest information, it can account for hidden evidences when you are not playing with 3 evidences. So discounting evidence will not immediatly discount all the ghosts that have it.
+						<br>You can always read the <a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main" target="_blank">Github page</a> readme.
+					</span>
 					
-					<span class="text">For more info read the githubpage readme. <br>
-					Made with love, have fun ghost identifying!</span>
 					<div class="copyright">
+					<hr class="line">
+					<h1>Made by Blossom</h1>
+					<div class="subhead">No AI used</div>					
 						<hr class="line"></hr>
 						<a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main">Single page Phasmo nightmare journal</a> © 2025 by <a href="https://www.youtube.com/@missblossom9102">Blossom studios</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 					</div>
