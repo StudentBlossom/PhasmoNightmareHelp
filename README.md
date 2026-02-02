@@ -27,6 +27,17 @@ Since this is supposed to help a single person in a game that can be played offl
 The looks of the page are meant to be similar to that of the game. However this is made harder due to the fact we cannot use other files since it is a single page or use online resources for offline accessibility. 
 
 ## Software
+### Structure
+The loading of the program:
+
+[The empty HTML page is being loaded] -> [the JS and CSS gets loaded] -> [the font gets loaded if not cached] -> [the font is loaded, meaning the full HTML page is loaded] -> [bootup function is called] -> [bootup deletes old preview text] -> [the bootup generates the evidence HTML and the ghost HTML and adds it to the page] -> [the page is fully done and is shown to the user]
+
+All the style gets done with CSS classes. All the discounting and of sorts are done with onclick events. Every piece of code is only made to do one thing. For more complex lambas we use named nested functions
+
+### Booting up
+Since this game is still actively worked on and updated. (for example the first version of this tool had 6 less ghosts) we need to make sure we can update and add new data easily, for this we save the data of the ghosts in an array and generate the HTML based on that. Same goes for the evidences tho it is unlikely to be changed.
+
+There is also something interesting regarding the deletion of preview text. (which use the name of selfdestruct) if we use a foreach to go through the elements and we simply do .remove() it will not work, since it will skip elements. (the list gets updated so every index goes one down, but the pointer goes one up) so we are required to do a for loop.
 
 ### Discounting ghost
 In the table shown under we have on the top the evidence values: -1 means it's discounted, 0 means unknown and 1 means its proven
@@ -49,9 +60,6 @@ If 2+ of their 3 evidences are discounted it means it cannot be that ghost since
 Then if a ghost has a required evidence if the 2 evidences that are not required are proven it means it cannot be the ghost
 since there wont be a third proven evidence so the required evidence is impossible, this means it cannot be the ghost.
 The code for this is quite simple: does it have required and is the required evidence unknown then we look. How many correct evidences does it have correct. The max is how many evidences it has - the amount of hidden evidences - 1. 
-
-### Booting up
-Since this game is still actively worked on and updated. (for example the first version of this tool had 6 less ghosts) we need to make sure we can update and add new data easily, for this we save the data of the ghosts in an array and generate the HTML based on that. Same goes for the evidences tho it is unlikely to be changed.
 
 
 ## Personal aspect
