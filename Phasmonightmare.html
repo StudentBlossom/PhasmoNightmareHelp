@@ -316,10 +316,7 @@
 				removedEv = 3- $("evidenceAmountSlider").value
 				$("evidenceAmount").innerText=$("evidenceAmountSlider").value
 				discountGhosts(evidences,ghostData)
-				
 			}
-			
-			
 			
 			var animationCycle;
 			
@@ -327,10 +324,12 @@
 				
 				var canvas = $("canvas");
 				var ctx = canvas.getContext("2d");
-				
 				ctx.clearRect(0, 0, canvas.width, canvas.height)
+				
 				orbs.forEach((orb)=>orb.draw(canvas))
 			}			
+			
+						var orbs = []
 			
 			function createOrbObject (){
 				const returnValue = {
@@ -371,13 +370,13 @@
 						if(this.y+this.r2<=0||this.y-this.r2>=canvas.height){
 							this.reset(canvas)
 						}
-
+						
 						if(this.x+this.r2<=0||this.x-this.r2>=canvas.width){
 							this.reset(canvas)
 						}
 						var heightUnit = canvas.height/4
 						var widthUnit = canvas.width/4
-
+						
 						if( (this.x>widthUnit&&this.x<widthUnit*3)&&(this.y>heightUnit&&this.y<heightUnit*3)){
 							this.reset(canvas)
 						}
@@ -431,8 +430,6 @@
 				return  returnValue;
 			}
 			
-			var orbs = []
-			
 			function updateAnimationBoolean (paraBool) {
 				if(paraBool){
 					var canvas = $("canvas")
@@ -441,7 +438,6 @@
 					var width = window.innerWidth -1
 					var totalOrbScreenSpace = ((height*width)*0.75)
 					var orbAmount = totalOrbScreenSpace/dotsPerOrb
-					console.log(orbAmount)
 					for(var i =0;i<orbAmount;i++){
 						orbs[i]=createOrbObject()
 						orbs[i].reset(canvas)
@@ -454,15 +450,21 @@
 				}
 			}
 			
-			function bootup (){
-				$("canvas").height=window.innerHeight-1;
+			function windowResize(e){
+								$("canvas").height=window.innerHeight-1;
 				$("canvas").width = window.innerWidth-1;
-				if(defaultSettings.startWithBackgroundAnimation){
+				if($("animationBox").checked){
+					updateAnimationBoolean(false)
 					updateAnimationBoolean(true)
-					$("animationBox").checked=true;
-				}
+				}				
+			}
+			
+			function bootup (){
+					$("animationBox").checked=defaultSettings.startWithBackgroundAnimation;
+					windowResize(null)
 				//disable right click popup
 				document.addEventListener('contextmenu', event => event.preventDefault());
+				window.addEventListener('resize', windowResize, true);
 				for(let i=names("selfdestruct").length-1;i>=0;i--){//TODO write this in SGB, it has to be like this cause the array of elements gets changed when stuff gets removed so it will go wrong if we use a foreach
 					names("selfdestruct")[i].remove()
 				}
@@ -542,7 +544,28 @@
 			margin-left:4%;
 			margin-right:4%;
 			height:90%;
-			grid-template-columns: 1fr 2% 1fr;
+			}
+			
+			@media (orientation: landscape) {
+				.pageContainer {
+					grid-template-columns: 1fr 2% 1fr;
+				}
+				.m2{
+					background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
+				}
+			}
+			
+			@media (orientation: portrait) {
+				.pageContainer {
+				grid-template-rows: 1fr 2% 1fr;
+				}
+				.m2{
+				background-image: linear-gradient(to top, var(--pageBG), #C7C09E, var(--pageBG));
+				}
+			}
+			
+			.m2{
+			height:100%;
 			}
 			
 			.page{
@@ -560,10 +583,6 @@
 			border-left:2px var(--pageBG) solid;			
 			}
 			
-			.m2{
-			height:100%;
-			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
-			}
 			
 			.line{
 			border-radius:35%;
