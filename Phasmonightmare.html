@@ -3,13 +3,22 @@
 		<title>Phasmo nightmare journal</title>
 		<link rel="icon" type="image/x-icon" href="https://images.squarespace-cdn.com/content/v1/63d13453310bdc0e36fc5d1b/582665a7-1b72-4fec-9f89-713d78191aa5/favicon.ico">
 		<script>
+			
+			//These are how the settings start off
+			//simply change them
+			const defaultSettings = {
+				clockStartNumber : -2,	//must be a number
+				evidenceAmount : 2, 	// minimum value is 0 and maximum is 3
+				startWithBackgroundAnimation : true //is either "true" or "false" without the "
+			}
+			
 			const ghostData = [
 			//ghost name, evidences(same order), hunt%, speedmode
 			createGhostObject("Banshee",		[1,0,0,1,1,0,0],50,0,"Is always female","The sanity check is for their target, not the average. can only kill their target during the hunt, has a unique paramic/sound recorder response."),
 			createGhostObject("Dayan", 			[0,0,1,1,0,0,1],65,2,"Is always female","huntspeed depends on if a closeby player is moving or not. Also hunt% is based on closebyplayer movement."	),
 			createGhostObject("Deogen",			[1,1,0,0,0,0,2],40,3,"has a unique spiritbox response","Always has LOS during hunt, becomes real slow when closeby but really fast otherwise, more visible during hunts."),
 			createGhostObject("Demon",			[0,1,0,0,1,1,0],100,0,"","hunt cooldown and smudgings prevention are shorter, crucifix range is 50% larger."),
-			createGhostObject("Gallu",			[0,0,1,0,1,0,1],60,2,"","very inconsistent ghost: has 3 states that cause hunt%, speed, incense duration, and crucifix range to be different."),
+			createGhostObject("Gallu",			[0,0,1,0,1,0,1],60,2,"Cannot step in salt while enraged","very inconsistent ghost: has 3 states that cause hunt%, speed, incense duration, and crucifix range to be different."),
 			createGhostObject("Goryo",			[2,0,1,0,1,0,0],50,0,"Cannot change favourite ghost room","Dots will only be visible on video, won't roam far."),
 			createGhostObject("Hantu",			[0,0,0,1,1,2,0],50,3,"Cannot turn on the fusebox","Speed is based on temperature of the room, has freezing breath clouds during hunts."),
 			createGhostObject("Jinn",			[0,0,1,0,1,1,0],50,2,"","Cannot turn off the fusebox, has abilities that work if  the fuse box is on, such as: speed based on LOS and distance, sanity lowering ability that generates EMF."),
@@ -47,6 +56,7 @@
 			let $ = (id) =>{return document.getElementById(id)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
 			let names = (stringname) => {return document.getElementsByName(stringname)}
+			let randbool = () => {return (Math.random()>0.5)}
 			
 			let removedEv=1;
 			let selectedGhost = -1;
@@ -124,6 +134,63 @@
 				}
 			}
 			
+			function discountGhosts (evidences,ghostData) {
+				ghostData.forEach(discountSingleGhost)
+				function discountSingleGhost(entry,id){
+					let hasRequiredEvidence = [false,-1,-1];
+					let isDiscounted = false;
+					let wrongEvidence = 0;
+					let rightEvidence = 0;
+					let amountEvidence = 0;
+					for(let i=0;i<entry.evidence.length;i++){
+						let ghostEv = entry.evidence[i];
+						let curEv = evidences[i][1]
+						
+						if(ghostEv==0){
+							if(curEv==1){
+								isDiscounted=true;
+								break;
+							}
+						}
+						if(ghostEv==2){
+							amountEvidence++;
+							hasRequiredEvidence=[true,curEv];
+							if(curEv==-1){
+								hasRequiredEvidence=[false,curEv];
+								isDiscounted=true;
+								break;
+							}
+						}
+						if(ghostEv==1){
+							amountEvidence++;
+							if(curEv==1){
+								rightEvidence++
+							} else 
+							if(curEv==-1){
+								wrongEvidence++;
+							}
+						}
+					}
+					
+					if(wrongEvidence>removedEv){
+						isDiscounted=true;
+					}
+					if(hasRequiredEvidence[0]){
+						if(rightEvidence>=amountEvidence-removedEv){//if we don't have more evidence we need
+							if(hasRequiredEvidence[1]!==1){
+								isDiscounted=true;
+							}
+						}
+					}
+					if(isDiscounted){
+						$("G"+id).classList.add("discounted")
+						} else {
+						$("G"+id).classList.remove("discounted")
+					}
+				}
+				
+			}
+			
 			function setGhostInfo(id) {
 				clearSelectedGhost();
 				selectedGhost=id
@@ -189,63 +256,6 @@
 				}
 			}
 			
-			function discountGhosts (evidences,ghostData) {
-				ghostData.forEach(discountSingleGhost)
-				function discountSingleGhost(entry,id){
-					let hasRequiredEvidence = [false,-1,-1];
-					let isDiscounted = false;
-					let wrongEvidence = 0;
-					let rightEvidence = 0;
-					let amountEvidence = 0;
-					for(let i=0;i<entry.evidence.length;i++){
-						let ghostEv = entry.evidence[i];
-						let curEv = evidences[i][1]
-						
-						if(ghostEv==0){
-							if(curEv==1){
-								isDiscounted=true;
-								break;
-							}
-						}
-						if(ghostEv==2){
-							amountEvidence++;
-							hasRequiredEvidence=[true,curEv];
-							if(curEv==-1){
-								hasRequiredEvidence=[false,curEv];
-								isDiscounted=true;
-								break;
-							}
-						}
-						if(ghostEv==1){
-							amountEvidence++;
-							if(curEv==1){
-								rightEvidence++
-							} else 
-							if(curEv==-1){
-								wrongEvidence++;
-							}
-						}
-					}
-					
-					if(wrongEvidence>removedEv){
-						isDiscounted=true;
-					}
-					if(hasRequiredEvidence[0]){
-						if(rightEvidence>=amountEvidence-removedEv){//if we don't have more evidence we need
-							if(hasRequiredEvidence[1]!==1){
-								isDiscounted=true;
-							}
-						}
-					}
-					if(isDiscounted){
-						$("G"+id).classList.add("discounted")
-						} else {
-						$("G"+id).classList.remove("discounted")
-					}
-				}
-				
-			}
-			
 			function clearSelectedGhost (){
 				if(selectedGhost>=0){
 					$("G"+selectedGhost).classList.remove("selected")
@@ -259,14 +269,6 @@
 				setInfo(emptyInfo)
 			}
 			
-			function resetButton (){
-				clearInfo()
-				clearSelectedGhost()
-				clearManualDiscountAndProof()
-				discountGhosts(evidences,ghostData)
-				startTimer()
-			}
-			
 			function clearManualDiscountAndProof () {
 				for(let i=0;i<evidences.length;i++){
 					evidences[i][1]=0;
@@ -277,6 +279,15 @@
 					$("G"+i).classList.remove("manualdiscounted")
 				}
 			}
+			
+			function resetButton (){
+				clearInfo()
+				clearSelectedGhost()
+				clearManualDiscountAndProof()
+				discountGhosts(evidences,ghostData)
+				startTimer()
+			}
+			
 			
 			let timerInterval;
 			let timerCounter;
@@ -291,7 +302,6 @@
 			function timer (){
 				$("timer").innerText=timerCounter++;
 			}
-			
 			
 			function nextPage(){
 				names("page1").forEach((elem)=>{elem.hidden=true})
@@ -309,7 +319,148 @@
 				
 			}
 			
+			
+			
+			var animationCycle;
+			
+			function backgroundAnimation (){			
+				
+				var canvas = $("canvas");
+				var ctx = canvas.getContext("2d");
+				
+				ctx.clearRect(0, 0, canvas.width, canvas.height)
+				orbs.forEach((orb)=>orb.draw(canvas))
+			}			
+			
+			function createOrbObject (){
+				const returnValue = {
+					x:150,
+					y:150,
+					dx:10,
+					dy:10,
+					r1:1,
+					r2:10,
+					xspeed: 1,
+					yspeed: 1,
+					speed:0.05,
+					movementcooldown: 0,
+					movement (canvas) {
+						var x = this.x
+						var y = this.y
+						x+=Math.sin(this.dx)
+						y+=Math.cos(this.dy)
+						this.dx+=this.speed*this.xspeed
+						this.dy+=this.speed*this.yspeed
+						if(this.movementcooldown>0){
+							this.movementcooldown--
+							} else {
+							if(randbool()){
+								this.xspeed*=-1
+								this.movementcooldown=10+20*Math.random()
+							}
+							if(randbool()){
+								this.yspeed*=-1
+								this.movementcooldown=10+20*Math.random()
+							}
+						}
+						this.y=y
+						this.x=x
+						this.boundsCheck(canvas)
+					},
+					boundsCheck(canvas) {
+						if(this.y+this.r2<=0||this.y-this.r2>=canvas.height){
+							this.reset(canvas)
+						}
+
+						if(this.x+this.r2<=0||this.x-this.r2>=canvas.width){
+							this.reset(canvas)
+						}
+						var heightUnit = canvas.height/4
+						var widthUnit = canvas.width/4
+
+						if( (this.x>widthUnit&&this.x<widthUnit*3)&&(this.y>heightUnit&&this.y<heightUnit*3)){
+							this.reset(canvas)
+						}
+					},
+					reset(canvas){
+						var heightUnit = canvas.height/8
+						var widthUnit = canvas.width/8
+						this.dx=1
+						this.dy=1
+						this.movementcooldown=15
+						this.speed = 0.04+Math.random()/50
+						if(randbool()){//check which axis we aline with
+							this.xspeed=1
+							if(randbool()){
+								this.y=heightUnit
+								this.yspeed=1
+								this.dy=3
+								} else {
+								this.y=heightUnit*7
+								this.yspeed=-1
+							}
+							this.x=widthUnit+widthUnit*6*Math.random()
+							} else {
+							this.yspeed=1
+							if(randbool()){
+								this.x=widthUnit
+								this.xspeed=1
+								this.dx=3
+								} else {
+								this.x=widthUnit*7
+								this.xspeed=-1
+							}
+							this.y=heightUnit+heightUnit*6*Math.random()
+						}
+					},
+					draw (canvas) {
+						var ctx = canvas.getContext("2d")
+						var grd = ctx.createRadialGradient(this.x, this.y, this.r1, this.x, this.y, this.r2);
+						grd.addColorStop(0, "white");
+						grd.addColorStop(1, "transparent");
+						this.movement(canvas)
+						
+						// Fill with gradient
+						ctx.fillStyle = grd;
+						ctx.fillRect(0, 0, canvas.width, canvas.height);
+						
+						
+					}
+					
+				}
+				return  returnValue;
+			}
+			
+			var orbs = []
+			
+			function updateAnimationBoolean (paraBool) {
+				if(paraBool){
+					var canvas = $("canvas")
+					var dotsPerOrb = 30000
+					var height = window.innerHeight-1
+					var width = window.innerWidth -1
+					var totalOrbScreenSpace = ((height*width)*0.75)
+					var orbAmount = totalOrbScreenSpace/dotsPerOrb
+					console.log(orbAmount)
+					for(var i =0;i<orbAmount;i++){
+						orbs[i]=createOrbObject()
+						orbs[i].reset(canvas)
+					}
+					animationCycle = setInterval(backgroundAnimation,15)
+					} else {
+					clearInterval(animationCycle)
+					orbs=[]
+					backgroundAnimation()
+				}
+			}
+			
 			function bootup (){
+				$("canvas").height=window.innerHeight-1;
+				$("canvas").width = window.innerWidth-1;
+				if(defaultSettings.startWithBackgroundAnimation){
+					updateAnimationBoolean(true)
+					$("animationBox").checked=true;
+				}
 				//disable right click popup
 				document.addEventListener('contextmenu', event => event.preventDefault());
 				for(let i=names("selfdestruct").length-1;i>=0;i--){//TODO write this in SGB, it has to be like this cause the array of elements gets changed when stuff gets removed so it will go wrong if we use a foreach
@@ -344,8 +495,6 @@
 				ghostData.map(ghostHTML)
 				updateEvidenceAmount()
 			}
-			
-			
 			
 		</script>
 		<style>
@@ -613,6 +762,17 @@
 			background: black;
 			cursor: pointer;
 			}
+			
+			.checkbox{
+			cursor:pointer;
+			width:1.5em;
+			height:1.5em;
+			border: 0px solid black;
+			}
+			.checkbox:hover {
+			background-color:black;
+			}
+			
 			.text{
 			font-size:20px;
 			}
@@ -623,12 +783,19 @@
 			right:0;
 			}
 			
-			
+			.canvas {
+			width:100%;
+			height:100%;
+			top:0;
+			position:absolute;
+			z-index:-1;
+			}
 			
 		</style>
 	</head>
 	
 	<body id="body" onload="bootup()">
+		<canvas id="canvas" class="canvas"></canvas>
 		<div class="pageContainer">
 			<div class="page left">
 				<div name="page1">
@@ -650,6 +817,10 @@
 						<span class="settingsLabel">How many evidences:<span id="evidenceAmount">2</span></span>
 						<span></span>
 						<input type="range" class="slider" min="0" max="3" value="2" onchange="updateEvidenceAmount()" id="evidenceAmountSlider">
+						
+						<span class="settingsLabel">Background orbs:</span>
+						<span></span>
+						<input type="checkbox" class="checkbox" id="animationBox" onchange="updateAnimationBoolean(this.checked)" ></input>
 						
 						<span class="settingsLabel">Link to the maps</span>
 						<span></span>
@@ -687,21 +858,18 @@
 					<h1>How to:</h1>
 					<hr class="line">
 					<span class="text">
-						By left clicking on an evidence it will be <span class="proof">proven</span> by right clicking while it is <span class="proof">proven</span> it will go back to normal.
-						If you right click an evidence it will be <span class="manualdiscounted">discounted</span> and by left clicking <span class="manualdiscounted">discounted</span> evidence it will go back to normal.
+						<br>By left clicking on an evidence it will be <span class="proof">proven</span> by right clicking while it is <span class="proof">proven</span> it will go back to normal. If you right click an evidence it will be <span class="manualdiscounted">discounted</span> and by left clicking <span class="manualdiscounted">discounted</span> evidence it will go back to normal.
 						<br>By left clicking on a ghost name it's info will appear on the right page, by left clicking a ghost you will <span class="manualdiscounted">manually discount</span> the ghost and by right clicking it again you will make it go back to normal.
-						<br>There are 2 settings. The timer start: This is the number the timer will start at when you click the reset button. How many evidences: This slider is for how many evidences you are playing with. By changing the slider you can make it go between 0 and 3 evidences.
-						<br>What does this page do for you: Aside from providing easy and accurate to digest information, it can account for hidden evidences when you are not playing with 3 evidences. So discounting evidence will not immediatly discount all the ghosts that have it.
-						<br>You can always read the <a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main" target="_blank">Github page</a> readme.
+						<br><br>There are 3 settings. The timer start: This is the number the timer will start at when you click the reset button. How many evidences: This slider is for how many evidences you are playing with. By changing the slider you can make it go between 0 and 3 evidences. The animation checkbox allows you to turn the background orbs on or off.
+						<br><br>What does this page do for you: Aside from providing easy and accurate to digest information, it can account for hidden evidences when you are not playing with 3 evidences. So discounting evidence will not immediatly discount all the ghosts that have it.
+						<br><br>You can always read the <a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main" target="_blank">Github page</a> readme.
 					</span>
 					
 					<div class="copyright">
-					<hr class="line">
-					<h1>Made by Blossom</h1>
-					<div class="subhead">No AI used</div>					
 						<hr class="line"></hr>
 						<a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main">Single page Phasmo nightmare journal</a> © 2025 by <a href="https://www.youtube.com/@missblossom9102">Blossom studios</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
-					</div>
+						<div class="subhead">No AI used</div>
+					</div><!-- end copyright-->
 					
 				</div><!-- end page2 -->
 				
