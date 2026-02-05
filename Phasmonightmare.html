@@ -1,11 +1,12 @@
 <html lang="en">
 	<head>
 		<title>Phasmo nightmare journal</title>
-		<link rel="icon" type="image/x-icon" href="https://images.squarespace-cdn.com/content/v1/63d13453310bdc0e36fc5d1b/582665a7-1b72-4fec-9f89-713d78191aa5/favicon.ico">
+		<!-- <link rel="icon" type="image/x-icon" href="https://images.squarespace-cdn.com/content/v1/63d13453310bdc0e36fc5d1b/582665a7-1b72-4fec-9f89-713d78191aa5/favicon.ico"> -->
+		<link rel="icon" type="image/x-icon" href="data:image/webp;base64,UklGRs4EAABXRUJQVlA4WAoAAAAoAAAAHwAAHwAASUNDUAwCAAAAAAIMbGNtcwIQAABtbnRyUkdCIFhZWiAH3AABABkAAwApADlhY3NwQVBQTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9tYAAQAAAADTLWxjbXMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAApkZXNjAAAA/AAAAF5jcHJ0AAABXAAAAAt3dHB0AAABaAAAABRia3B0AAABfAAAABRyWFlaAAABkAAAABRnWFlaAAABpAAAABRiWFlaAAABuAAAABRyVFJDAAABzAAAAEBnVFJDAAABzAAAAEBiVFJDAAABzAAAAEBkZXNjAAAAAAAAAANjMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB0ZXh0AAAAAEZCAABYWVogAAAAAAAA9tYAAQAAAADTLVhZWiAAAAAAAAADFgAAAzMAAAKkWFlaIAAAAAAAAG+iAAA49QAAA5BYWVogAAAAAAAAYpkAALeFAAAY2lhZWiAAAAAAAAAkoAAAD4QAALbPY3VydgAAAAAAAAAaAAAAywHJA2MFkghrC/YQPxVRGzQh8SmQMhg7kkYFUXdd7WtwegWJsZp8rGm/fdPD6TD//1ZQOCDaAQAAMAkAnQEqIAAgAD5RJI5Fo6IhFAQAOAUEs4BgfpBH2vx2fQVLhTq/9VzAPpT2Cf4r/QP83wFf6zJ1sHejY1p52AG80tZxv2ILH6zSjOjUarnowAD+/+XlUQ910HCtP/8eJT1EcCjpelE+ptp/Do1jILTtS0D6bCSXk/rz0IIEQFQ1/+Yn/TigoGZ4VVBahaZ90SWq904f+hJv/5Kz3kwflr6o1px/ya/Nve//fg7MddFfba/4I/y2sS1iAGzr+975HT4xpXigh7KCJO74ziKNc7F3GrDzE6650E1/+x7mpFn6hpmTV9S1C/j1P/B833aLEkFU18uqnk8EFiv+Y6WEB9id5sZvyvp6J58XvYGzTLnkDzX/+ZU+xVSz3NpDHaGmHDrht+h1F5SNFv3uveyc4uA/bjckK204sdZhvdMQCT8JT7qy8etdE0ry1+bAhokCHxPVSLLSda7/BpdbaCdJKnWNf9foHtGdftJ+yduu00WhL7ZqPxRiLplW3zFTJB0OVLMpiDw/eOAn8TX/wP6GZ4zTUbmFbJwX5XQLqW90FrgcYovs5xpqPG8/pUSCyFftz/iq8uWe/3t08+1TTzFabsSrpgMeIkKduzxdm7pKyTqNbnakadA6AAAARVhJRroAAABFeGlmAABJSSoACAAAAAYAEgEDAAEAAAABAAAAGgEFAAEAAABWAAAAGwEFAAEAAABeAAAAKAEDAAEAAAACAAAAEwIDAAEAAAABAAAAaYcEAAEAAABmAAAAAAAAAEgAAAABAAAASAAAAAEAAAAGAACQBwAEAAAAMDIxMAGRBwAEAAAAAQIDAACgBwAEAAAAMDEwMAGgAwABAAAA//8AAAKgBAABAAAAIAAAAAOgBAABAAAAIAAAAAAAAAA=">
 		<script>
 			
 			//These are how the settings start off
-			//simply change them
+			//simply change them and save
 			const defaultSettings = {
 				clockStartNumber : -2,	//must be a number
 				evidenceAmount : 2, 	// minimum value is 0 and maximum is 3
@@ -18,7 +19,7 @@
 			createGhostObject("Dayan", 			[0,0,1,1,0,0,1],65,2,"Is always female","huntspeed depends on if a closeby player is moving or not. Also hunt% is based on closebyplayer movement."	),
 			createGhostObject("Deogen",			[1,1,0,0,0,0,2],40,3,"has a unique spiritbox response","Always has LOS during hunt, becomes real slow when closeby but really fast otherwise, more visible during hunts."),
 			createGhostObject("Demon",			[0,1,0,0,1,1,0],100,0,"","hunt cooldown and smudgings prevention are shorter, crucifix range is 50% larger."),
-			createGhostObject("Gallu",			[0,0,1,0,1,0,1],60,2,"Cannot step in salt while enraged","very inconsistent ghost: has 3 states that cause hunt%, speed, incense duration, and crucifix range to be different."),
+			createGhostObject("Gallu",			[0,0,1,0,1,0,1],60,2,"Cannot step in salt while in enraged state","very inconsistent ghost: has 3 states that cause hunt%, speed, incense duration, and crucifix range to be different."),
 			createGhostObject("Goryo",			[2,0,1,0,1,0,0],50,0,"Cannot change favourite ghost room","Dots will only be visible on video, won't roam far."),
 			createGhostObject("Hantu",			[0,0,0,1,1,2,0],50,3,"Cannot turn on the fusebox","Speed is based on temperature of the room, has freezing breath clouds during hunts."),
 			createGhostObject("Jinn",			[0,0,1,0,1,1,0],50,2,"","Cannot turn off the fusebox, has abilities that work if  the fuse box is on, such as: speed based on LOS and distance, sanity lowering ability that generates EMF."),
@@ -54,8 +55,9 @@
 			]
 			
 			let $ = (id) =>{return document.getElementById(id)}
-			let getI = (stringid) => {return parseInt(stringid.slice(1))}
 			let names = (stringname) => {return document.getElementsByName(stringname)}
+			let getByClass = (stringClass) => {return document.getElementsByClassName(stringClass)}
+			let getI = (stringid) => {return parseInt(stringid.slice(1))}
 			let randbool = () => {return (Math.random()>0.5)}
 			
 			let removedEv=1;
@@ -194,6 +196,7 @@
 			function setGhostInfo(id) {
 				clearSelectedGhost();
 				selectedGhost=id
+				$("G"+id).classList.add("selected");
 				let data=ghostData[id]				
 				setInfo(data)
 			}
@@ -270,14 +273,29 @@
 			}
 			
 			function clearManualDiscountAndProof () {
-				for(let i=0;i<evidences.length;i++){
-					evidences[i][1]=0;
-					$("E"+i).classList.remove("manualdiscounted")
-					$("E"+i).classList.remove("proof")
+				var provenElements = Array.from(getByClass("proof"))
+				function removeProof (element){
+					if(element.id!=""){
+						evidences[getI(element.id)][1]=0;						
+						element.classList.remove("proof")
+					}
 				}
-				for(let i=0;i<ghostData.length;i++){
-					$("G"+i).classList.remove("manualdiscounted")
+				provenElements.forEach(removeProof)
+				
+				var discountedElements = Array.from(getByClass("manualdiscounted"))
+				function removeDiscount (element){
+					if(!element
+					.parentElement
+					.classList
+					.contains("text")){
+						if(element.parentElement.id=="evidences"){
+							evidences[getI(element.id)][1]=0
+							console.log(element)
+						}
+						element.classList.remove("manualdiscounted")
+					}
 				}
+				discountedElements.forEach(removeDiscount)
 			}
 			
 			function resetButton (){
@@ -326,10 +344,10 @@
 				var ctx = canvas.getContext("2d");
 				ctx.clearRect(0, 0, canvas.width, canvas.height)
 				
-				orbs.forEach((orb)=>orb.draw(canvas))
+				orbs.forEach((orb)=>orb.drawAndMove(canvas))
 			}			
 			
-						var orbs = []
+			var orbs = []
 			
 			function createOrbObject (){
 				const returnValue = {
@@ -342,42 +360,38 @@
 					xspeed: 1,
 					yspeed: 1,
 					speed:0.05,
-					movementcooldown: 0,
-					movement (canvas) {
-						var x = this.x
-						var y = this.y
-						x+=Math.sin(this.dx)
-						y+=Math.cos(this.dy)
+					directionCooldown: 0,
+					move (canvas) {
+						
+						this.x+=Math.sin(this.dx)
+						this.y+=Math.cos(this.dy)
 						this.dx+=this.speed*this.xspeed
 						this.dy+=this.speed*this.yspeed
-						if(this.movementcooldown>0){
-							this.movementcooldown--
+						if(this.directionCooldown>0){
+							this.directionCooldown--
 							} else {
 							if(randbool()){
 								this.xspeed*=-1
-								this.movementcooldown=10+20*Math.random()
+								this.directionCooldown=10+20*Math.random()
 							}
 							if(randbool()){
 								this.yspeed*=-1
-								this.movementcooldown=10+20*Math.random()
+								this.directionCooldown=10+20*Math.random()
 							}
 						}
-						this.y=y
-						this.x=x
 						this.boundsCheck(canvas)
 					},
 					boundsCheck(canvas) {
-						if(this.y+this.r2<=0||this.y-this.r2>=canvas.height){
-							this.reset(canvas)
-						}
-						
-						if(this.x+this.r2<=0||this.x-this.r2>=canvas.width){
-							this.reset(canvas)
-						}
 						var heightUnit = canvas.height/4
 						var widthUnit = canvas.width/4
 						
-						if( (this.x>widthUnit&&this.x<widthUnit*3)&&(this.y>heightUnit&&this.y<heightUnit*3)){
+						if(	this.y+this.r2<=0
+						||this.y-this.r2>=canvas.height
+						||this.x+this.r2<=0
+						||this.x-this.r2>=canvas.width
+						|| ((this.x>widthUnit&&this.x<widthUnit*3)
+						&&(this.y>heightUnit&&this.y<heightUnit*3))//if too much in the center
+						){
 							this.reset(canvas)
 						}
 					},
@@ -386,7 +400,7 @@
 						var widthUnit = canvas.width/8
 						this.dx=1
 						this.dy=1
-						this.movementcooldown=15
+						this.directionCooldown=15
 						this.speed = 0.04+Math.random()/50
 						if(randbool()){//check which axis we aline with
 							this.xspeed=1
@@ -417,15 +431,14 @@
 						var grd = ctx.createRadialGradient(this.x, this.y, this.r1, this.x, this.y, this.r2);
 						grd.addColorStop(0, "white");
 						grd.addColorStop(1, "transparent");
-						this.movement(canvas)
 						
-						// Fill with gradient
 						ctx.fillStyle = grd;
 						ctx.fillRect(0, 0, canvas.width, canvas.height);
-						
-						
+					},
+					drawAndMove(canvas){
+						this.draw(canvas)
+						this.move(canvas)
 					}
-					
 				}
 				return  returnValue;
 			}
@@ -451,7 +464,7 @@
 			}
 			
 			function windowResize(e){
-								$("canvas").height=window.innerHeight-1;
+				$("canvas").height=window.innerHeight-1;
 				$("canvas").width = window.innerWidth-1;
 				if($("animationBox").checked){
 					updateAnimationBoolean(false)
@@ -459,13 +472,15 @@
 				}				
 			}
 			
+			
 			function bootup (){
-					$("animationBox").checked=defaultSettings.startWithBackgroundAnimation;
-					windowResize(null)
+				
+				$("animationBox").checked=defaultSettings.startWithBackgroundAnimation;
+				windowResize(null)//start off the background animation
 				//disable right click popup
 				document.addEventListener('contextmenu', event => event.preventDefault());
 				window.addEventListener('resize', windowResize, true);
-				for(let i=names("selfdestruct").length-1;i>=0;i--){//TODO write this in SGB, it has to be like this cause the array of elements gets changed when stuff gets removed so it will go wrong if we use a foreach
+				for(let i=names("selfdestruct").length-1;i>=0;i--){//SGB
 					names("selfdestruct")[i].remove()
 				}
 				//add all evidences
@@ -489,11 +504,12 @@
 					element.appendChild(innerText)
 					element.id="G"+iter
 					element.classList.add("ghost")
-					element.onclick=function () {this.classList.add("selected");setGhostInfo(getI(this.id))}
+					element.onclick=function () {setGhostInfo(getI(this.id))}
 					element.oncontextmenu=function () {this.classList.toggle("manualdiscounted")}
 					cell.appendChild(element)
 					$("ghosts").appendChild(cell)
 				}
+				ghostData.sort((a,b)=>a.name.localeCompare(b.name))
 				ghostData.map(ghostHTML)
 				updateEvidenceAmount()
 			}
@@ -547,21 +563,21 @@
 			}
 			
 			@media (orientation: landscape) {
-				.pageContainer {
-					grid-template-columns: 1fr 2% 1fr;
-				}
-				.m2{
-					background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
-				}
+			.pageContainer {
+			grid-template-columns: 1fr 2% 1fr;
+			}
+			.m2{
+			background-image: linear-gradient(to right, var(--pageBG), #C7C09E, var(--pageBG));
+			}
 			}
 			
 			@media (orientation: portrait) {
-				.pageContainer {
-				grid-template-rows: 1fr 2% 1fr;
-				}
-				.m2{
-				background-image: linear-gradient(to top, var(--pageBG), #C7C09E, var(--pageBG));
-				}
+			.pageContainer {
+			grid-template-rows: 1fr 2% 1fr;
+			}
+			.m2{
+			background-image: linear-gradient(to top, var(--pageBG), #C7C09E, var(--pageBG));
+			}
 			}
 			
 			.m2{
@@ -580,7 +596,7 @@
 			padding-right:3px;
 			position:relative;
 			border-right:2px var(--pageBG) solid;
-			border-left:2px var(--pageBG) solid;			
+			border-left:2px var(--pageBG) solid;	
 			}
 			
 			
@@ -823,36 +839,34 @@
 					<div id="evidences" class="evidencesContainer"><div class="selfdestruct evidence" name="selfdestruct"> here the evidence will be</div></div>
 					<hr class="line"></hr>
 					<div id="ghosts" class="ghostContainer"><div class="selfdestruct ghost" name="selfdestruct"> Here will be the ghosts</div></div>
-				</div>
+				</div><!-- end page1 -->
 				
 				<div name="page2" hidden>
 					<h1>Settings:</h1>
 					<hr class="line"></hr>
 					<div class="settingsContainer">
-						<span class="settingsLabel">Timer start:</span>
+						<span class="settingsLabel" title="the number the timer starts at">Timer start:</span>
 						<span></span>
 						<input type="number" class="number" value="-2" id="timerStart"></input>
 						
-						<span class="settingsLabel">How many evidences:<span id="evidenceAmount">2</span></span>
+						<span class="settingsLabel" title="how many evidences you are playing with">How many evidences:<span id="evidenceAmount">2</span></span>
 						<span></span>
 						<input type="range" class="slider" min="0" max="3" value="2" onchange="updateEvidenceAmount()" id="evidenceAmountSlider">
 						
-						<span class="settingsLabel">Background orbs:</span>
+						<span class="settingsLabel" title="toggle the background animation">Background orbs:</span>
 						<span></span>
 						<input type="checkbox" class="checkbox" id="animationBox" onchange="updateAnimationBoolean(this.checked)" ></input>
 						
-						<span class="settingsLabel">Link to the maps</span>
+						<span class="settingsLabel" title="a link to a map overview site">Link to the maps</span>
 						<span></span>
 						<p><a class="settingInfo" href="https://phasmo.karotte.org/" target="_blank">map site</a></p>
 						
 						<button onclick="previousPage()" class="leftCorner"></button>
-					</div><!-- end page2 -->
+					</div><!-- end settingsContainer -->
 					
 					
-				</div><!-- end page left-->
-				
-				
-			</div>
+				</div><!-- end page2 -->
+			</div><!-- end page left-->
 			<div class="m2"></div>
 			<div class="page right"> 
 				<div name="page1">
@@ -871,7 +885,7 @@
 						<p class="timer" id="timer"></p>
 						<button onclick="resetButton()" class="resetButton" autofocus>Reset</button>
 					</div>
-					<button onclick="nextPage()" class="rightCorner" title="Click here for the next page (settings)"></button>
+					<button onclick="nextPage()" class="rightCorner"></button>
 				</div><!-- end page1 -->
 				<div name="page2" hidden>
 					<h1>How to:</h1>
@@ -886,6 +900,7 @@
 					
 					<div class="copyright">
 						<hr class="line"></hr>
+						
 						<a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main">Single page Phasmo nightmare journal</a> © 2025 by <a href="https://www.youtube.com/@missblossom9102">Blossom studios</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 						<div class="subhead">No AI used</div>
 					</div><!-- end copyright-->
