@@ -1,8 +1,8 @@
 <html lang="en">
 	<head>
 		<title>Phasmo nightmare journal</title>
-		<!-- <link rel="icon" type="image/x-icon" href="https://images.squarespace-cdn.com/content/v1/63d13453310bdc0e36fc5d1b/582665a7-1b72-4fec-9f89-713d78191aa5/favicon.ico"> -->
 		<link rel="icon" type="image/x-icon" href="data:image/webp;base64,UklGRs4EAABXRUJQVlA4WAoAAAAoAAAAHwAAHwAASUNDUAwCAAAAAAIMbGNtcwIQAABtbnRyUkdCIFhZWiAH3AABABkAAwApADlhY3NwQVBQTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9tYAAQAAAADTLWxjbXMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAApkZXNjAAAA/AAAAF5jcHJ0AAABXAAAAAt3dHB0AAABaAAAABRia3B0AAABfAAAABRyWFlaAAABkAAAABRnWFlaAAABpAAAABRiWFlaAAABuAAAABRyVFJDAAABzAAAAEBnVFJDAAABzAAAAEBiVFJDAAABzAAAAEBkZXNjAAAAAAAAAANjMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB0ZXh0AAAAAEZCAABYWVogAAAAAAAA9tYAAQAAAADTLVhZWiAAAAAAAAADFgAAAzMAAAKkWFlaIAAAAAAAAG+iAAA49QAAA5BYWVogAAAAAAAAYpkAALeFAAAY2lhZWiAAAAAAAAAkoAAAD4QAALbPY3VydgAAAAAAAAAaAAAAywHJA2MFkghrC/YQPxVRGzQh8SmQMhg7kkYFUXdd7WtwegWJsZp8rGm/fdPD6TD//1ZQOCDaAQAAMAkAnQEqIAAgAD5RJI5Fo6IhFAQAOAUEs4BgfpBH2vx2fQVLhTq/9VzAPpT2Cf4r/QP83wFf6zJ1sHejY1p52AG80tZxv2ILH6zSjOjUarnowAD+/+XlUQ910HCtP/8eJT1EcCjpelE+ptp/Do1jILTtS0D6bCSXk/rz0IIEQFQ1/+Yn/TigoGZ4VVBahaZ90SWq904f+hJv/5Kz3kwflr6o1px/ya/Nve//fg7MddFfba/4I/y2sS1iAGzr+975HT4xpXigh7KCJO74ziKNc7F3GrDzE6650E1/+x7mpFn6hpmTV9S1C/j1P/B833aLEkFU18uqnk8EFiv+Y6WEB9id5sZvyvp6J58XvYGzTLnkDzX/+ZU+xVSz3NpDHaGmHDrht+h1F5SNFv3uveyc4uA/bjckK204sdZhvdMQCT8JT7qy8etdE0ry1+bAhokCHxPVSLLSda7/BpdbaCdJKnWNf9foHtGdftJ+yduu00WhL7ZqPxRiLplW3zFTJB0OVLMpiDw/eOAn8TX/wP6GZ4zTUbmFbJwX5XQLqW90FrgcYovs5xpqPG8/pUSCyFftz/iq8uWe/3t08+1TTzFabsSrpgMeIkKduzxdm7pKyTqNbnakadA6AAAARVhJRroAAABFeGlmAABJSSoACAAAAAYAEgEDAAEAAAABAAAAGgEFAAEAAABWAAAAGwEFAAEAAABeAAAAKAEDAAEAAAACAAAAEwIDAAEAAAABAAAAaYcEAAEAAABmAAAAAAAAAEgAAAABAAAASAAAAAEAAAAGAACQBwAEAAAAMDIxMAGRBwAEAAAAAQIDAACgBwAEAAAAMDEwMAGgAwABAAAA//8AAAKgBAABAAAAIAAAAAOgBAABAAAAIAAAAAAAAAA=">
+		<!-- All copyright for the favicon belongs to phasmophobia -->
 		<script>
 			
 			//These are how the settings start off
@@ -100,18 +100,37 @@
 					break;
 				}
 				
+				let requiredEvidence = false
+				let evidenceAmount = 0
+				let requiredEvidenceId = -1
+				function checkEvidence (entry,id) {
+					if(entry>0){
+						evidenceAmount++
+						if(entry==2){
+							requiredEvidence=true;
+							requiredEvidenceId=id
+						}
+					}
+				}
+				paraEvidence.forEach(checkEvidence)
+				
 				const returnValue = {
-					name: 			paraName.replace('_',' '),
-					link:			paraName,
-					evidence:		paraEvidence,
-					huntTier:		checkHuntTier,
-					huntPercent:	paraHunt,
-					speedTier:		checkSpeedTier,
-					hasExtra:		checkHasExtra,
-					info:			paraInfo
+					name: 					paraName.replace('_',' '),
+					link:					paraName,
+					evidence:				paraEvidence,
+					evidenceAmount:			evidenceAmount,
+					hasRequiredEvidence:	requiredEvidence,
+					huntTier:				checkHuntTier,
+					huntPercent:			paraHunt,
+					speedTier:				checkSpeedTier,
+					hasExtra:				checkHasExtra,
+					info:					paraInfo
 				}
 				if(checkHasExtra){
 					returnValue.extraInfo=paraExtraInfo
+				}
+				if(requiredEvidence){
+					returnValue.requiredEvidenceId = requiredEvidenceId;	
 				}
 				return returnValue;
 			}
@@ -139,11 +158,11 @@
 			function discountGhosts (evidences,ghostData) {
 				ghostData.forEach(discountSingleGhost)
 				function discountSingleGhost(entry,id){
-					let hasRequiredEvidence = [false,-1,-1];
+					let requiredEvidenceProven = false;
 					let isDiscounted = false;
 					let wrongEvidence = 0;
 					let rightEvidence = 0;
-					let amountEvidence = 0;
+					
 					for(let i=0;i<entry.evidence.length;i++){
 						let ghostEv = entry.evidence[i];
 						let curEv = evidences[i][1]
@@ -155,16 +174,14 @@
 							}
 						}
 						if(ghostEv==2){
-							amountEvidence++;
-							hasRequiredEvidence=[true,curEv];
 							if(curEv==-1){
-								hasRequiredEvidence=[false,curEv];
 								isDiscounted=true;
 								break;
+								} else if(curEv==1){
+								requiredEvidenceProven=true;
 							}
 						}
 						if(ghostEv==1){
-							amountEvidence++;
 							if(curEv==1){
 								rightEvidence++
 							} else 
@@ -177,11 +194,9 @@
 					if(wrongEvidence>removedEv){
 						isDiscounted=true;
 					}
-					if(hasRequiredEvidence[0]){
-						if(rightEvidence>=amountEvidence-removedEv){//if we don't have more evidence we need
-							if(hasRequiredEvidence[1]!==1){
-								isDiscounted=true;
-							}
+					if(entry.hasRequiredEvidence&&(!requiredEvidenceProven)){
+						if(rightEvidence>=entry.evidenceAmount-removedEv){//if we don't have more evidence we need
+							isDiscounted=true;
 						}
 					}
 					if(isDiscounted){
@@ -290,7 +305,6 @@
 					.contains("text")){
 						if(element.parentElement.id=="evidences"){
 							evidences[getI(element.id)][1]=0
-							console.log(element)
 						}
 						element.classList.remove("manualdiscounted")
 					}
@@ -314,7 +328,7 @@
 				clearInterval(timerInterval)
 				timerCounter=$("timerStart").value
 				timer();
-				timerInterval=setInterval(timer,1000)
+				timer=setInterval(timer,1000)
 			}
 			
 			function timer (){
@@ -336,18 +350,20 @@
 				discountGhosts(evidences,ghostData)
 			}
 			
-			var animationCycle;
 			
 			function backgroundAnimation (){			
 				
 				var canvas = $("canvas");
 				var ctx = canvas.getContext("2d");
 				ctx.clearRect(0, 0, canvas.width, canvas.height)
-				
-				orbs.forEach((orb)=>orb.drawAndMove(canvas))
-			}			
+				if($("animationBox").checked){
+					orbs.forEach((orb)=>orb.drawAndMove(canvas))
+					requestAnimationFrame(backgroundAnimation)
+					} 
+			}
 			
 			var orbs = []
+			var orbOutsideSlack = 10
 			
 			function createOrbObject (){
 				const returnValue = {
@@ -360,6 +376,7 @@
 					xspeed: 1,
 					yspeed: 1,
 					speed:0.05,
+					outsideSlack : orbOutsideSlack,
 					directionCooldown: 0,
 					move (canvas) {
 						
@@ -385,10 +402,10 @@
 						var heightUnit = canvas.height/4
 						var widthUnit = canvas.width/4
 						
-						if(	this.y+this.r2<=0
-						||this.y-this.r2>=canvas.height
-						||this.x+this.r2<=0
-						||this.x-this.r2>=canvas.width
+						if(	this.y+this.r2<=0-this.outsideSlack
+						||this.y-this.r2>=canvas.height+this.outsideSlack
+						||this.x+this.r2<=0-this.outsideSlack
+						||this.x-this.r2>=canvas.width+this.outsideSlack
 						|| ((this.x>widthUnit&&this.x<widthUnit*3)
 						&&(this.y>heightUnit&&this.y<heightUnit*3))//if too much in the center
 						){
@@ -398,32 +415,32 @@
 					reset(canvas){
 						var heightUnit = canvas.height/8
 						var widthUnit = canvas.width/8
-						this.dx=1
-						this.dy=1
+						this.dx=0
+						this.dy=0
 						this.directionCooldown=15
 						this.speed = 0.04+Math.random()/50
 						if(randbool()){//check which axis we aline with
-							this.xspeed=1
+							this.xspeed=(randbool()) ? 1:-1;
+							this.x=widthUnit+widthUnit*6*Math.random()
 							if(randbool()){
 								this.y=heightUnit
-								this.yspeed=1
-								this.dy=3
+								this.dx=Math.PI
+								this.dy=Math.PI
 								} else {
 								this.y=heightUnit*7
-								this.yspeed=-1
 							}
-							this.x=widthUnit+widthUnit*6*Math.random()
 							} else {
-							this.yspeed=1
+							this.yspeed=(randbool()) ? 1:-1;
+							this.y=heightUnit+heightUnit*6*Math.random()
 							if(randbool()){
 								this.x=widthUnit
-								this.xspeed=1
-								this.dx=3
+								this.dx=Math.PI*1.5
+								this.dy=Math.PI*1.5
 								} else {
 								this.x=widthUnit*7
-								this.xspeed=-1
+								this.dx=Math.PI/2
+								this.dy=Math.PI/2
 							}
-							this.y=heightUnit+heightUnit*6*Math.random()
 						}
 					},
 					draw (canvas) {
@@ -447,19 +464,17 @@
 				if(paraBool){
 					var canvas = $("canvas")
 					var dotsPerOrb = 30000
-					var height = window.innerHeight-1
-					var width = window.innerWidth -1
+					var height = window.innerHeight-1+orbOutsideSlack
+					var width = window.innerWidth -1+orbOutsideSlack
 					var totalOrbScreenSpace = ((height*width)*0.75)
 					var orbAmount = totalOrbScreenSpace/dotsPerOrb
 					for(var i =0;i<orbAmount;i++){
 						orbs[i]=createOrbObject()
 						orbs[i].reset(canvas)
 					}
-					animationCycle = setInterval(backgroundAnimation,15)
+						requestAnimationFrame(backgroundAnimation)
 					} else {
-					clearInterval(animationCycle)
 					orbs=[]
-					backgroundAnimation()
 				}
 			}
 			
