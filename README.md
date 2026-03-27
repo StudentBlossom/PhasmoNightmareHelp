@@ -39,6 +39,15 @@ Since this game is still actively worked on and updated. (for example the first 
 
 There is also something interesting regarding the deletion of preview text. (which use the name of selfdestruct) if we use a foreach to go through the elements and we simply do .remove() it will not work, since it will skip elements. (the list gets updated so every index goes one down, but the pointer goes one up) so we are required to do a for loop.
 
+### Orbs
+To draw the orbs we first need to know how many orbs there are. To do this we use the fuction calcOrbAmount. 
+Orbs use pixels as a unit of length, width AND surface area. 
+We first use the screen width and height, and use those to calculate the deadspace (see next alinea) then we add our slack (see next alinea) twice for both sides. Then simply we have a width and a height, get surface area, subtract the deadspace. That's the total space orbs have, then divide by pixelsPerOrbs (after some testing 30 000 had the right feel) and then we know how many orbs we have and we add those.
+
+Orbs don't use the entire screen to exist. There is a deadspace in the middle. So in the middle is a square with height 50% and width 50% (so 25% of the surface of the base screen surface) since the book is in the middle of the screen. Then there is slack on the outsides of the screen, allowing the orbs to go offscreen and come back. This shouldn't be too big because all the orbs start behind the books. So if the orb is too far off screen or inside the deadspace it will be reset and it's movement gets reset.
+
+Lastly the orbs move simply by going in circles and randomly changing from clockwise to counter clockwise. 
+
 ### Discounting ghost
 In the table shown under we have on the top the evidence values: -1 means it's discounted, 0 means unknown and 1 means its proven
 On the left we have the evidence of the ghost values: 0 means it does not have it, 1 means it does, 2 means it is required
