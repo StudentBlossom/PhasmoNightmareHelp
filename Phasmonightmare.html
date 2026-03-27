@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<title>Phasmo nightmare journal</title>
@@ -55,7 +56,7 @@
 			]
 			
 			let $ = (id) =>{return document.getElementById(id)}
-			let names = (stringname) => {return document.getElementsByName(stringname)}
+			let names = (stringname) => {return document.querySelectorAll('[data-name='+stringname+']');}
 			let getByClass = (stringClass) => {return document.getElementsByClassName(stringClass)}
 			let getI = (stringid) => {return parseInt(stringid.slice(1))}
 			let randbool = () => {return (Math.random()>0.5)}
@@ -167,45 +168,44 @@
 						let ghostEv = entry.evidence[i];
 						let curEv = evidences[i][1]
 						
-						if(ghostEv==0){
+						if(ghostEv==0){ 
 							if(curEv==1){
 								isDiscounted=true;
 								break;
 							}
-						}
-						if(ghostEv==2){
-							if(curEv==-1){
-								isDiscounted=true;
-								break;
-								} else if(curEv==1){
-								requiredEvidenceProven=true;
-							}
-						}
-						if(ghostEv==1){
+						} else if(ghostEv==1){
 							if(curEv==1){
 								rightEvidence++
 							} else 
 							if(curEv==-1){
 								wrongEvidence++;
 							}
+						} else if(ghostEv==2){ 
+							if(curEv==-1){
+								isDiscounted=true;
+								break;
+								} else if(curEv==1){
+								requiredEvidenceProven=true;
+							}
+						}//end elseifs
+					}//end for evidence loop
+					
+					if(wrongEvidence>removedEv){
+					isDiscounted=true;
+					}
+					
+					if(entry.hasRequiredEvidence&&(!requiredEvidenceProven)){
+						if(rightEvidence>=entry.evidenceAmount-removedEv){//if we don't have more evidence we need
+						isDiscounted=true;
 						}
 					}
 					
-					if(wrongEvidence>removedEv){
-						isDiscounted=true;
-					}
-					if(entry.hasRequiredEvidence&&(!requiredEvidenceProven)){
-						if(rightEvidence>=entry.evidenceAmount-removedEv){//if we don't have more evidence we need
-							isDiscounted=true;
-						}
-					}
 					if(isDiscounted){
 						$("G"+id).classList.add("discounted")
-						} else {
+					} else {
 						$("G"+id).classList.remove("discounted")
 					}
 				}
-				
 			}
 			
 			function setGhostInfo(id) {
@@ -359,11 +359,11 @@
 				if($("animationBox").checked){
 					orbs.forEach((orb)=>orb.drawAndMove(canvas))
 					requestAnimationFrame(backgroundAnimation)
-					} 
+				} 
 			}
 			
 			var orbs = []
-			var orbOutsideSlack = 10
+			const orbOutsideSlack = 10
 			
 			function createOrbObject (){
 				const returnValue = {
@@ -461,37 +461,39 @@
 			}
 			
 			function updateAnimationBoolean (paraBool) {
+				calcOrbAmount(paraBool)
+				if(paraBool){
+					requestAnimationFrame(backgroundAnimation)
+				} 
+			}
+			
+			function calcOrbAmount (paraBool) {
+				orbs=[]
 				if(paraBool){
 					var canvas = $("canvas")
-					var dotsPerOrb = 30000
+					const pixelsPerOrb = 30000
 					var height = window.innerHeight-1+orbOutsideSlack
 					var width = window.innerWidth -1+orbOutsideSlack
-					var totalOrbScreenSpace = ((height*width)*0.75)
-					var orbAmount = totalOrbScreenSpace/dotsPerOrb
+					var totalPixelsForOrbs = ((height*width)*0.75)
+					var orbAmount = totalPixelsForOrbs/pixelsPerOrb
 					for(var i =0;i<orbAmount;i++){
 						orbs[i]=createOrbObject()
 						orbs[i].reset(canvas)
 					}
-						requestAnimationFrame(backgroundAnimation)
-					} else {
-					orbs=[]
 				}
 			}
 			
 			function windowResize(e){
 				$("canvas").height=window.innerHeight-1;
 				$("canvas").width = window.innerWidth-1;
-				if($("animationBox").checked){
-					updateAnimationBoolean(false)
-					updateAnimationBoolean(true)
-				}				
+				calcOrbAmount($("animationBox").checked)
 			}
 			
 			
 			function bootup (){
-				
 				$("animationBox").checked=defaultSettings.startWithBackgroundAnimation;
-				windowResize(null)//start off the background animation
+				windowResize(null)//calculate the window size
+				updateAnimationBoolean($("animationBox").checked)
 				//disable right click popup
 				document.addEventListener('contextmenu', event => event.preventDefault());
 				window.addEventListener('resize', windowResize, true);
@@ -549,8 +551,18 @@
 			-ms-user-select: none;
 			user-select: none;
 			}
+			html {
+			width: 100%; height: 100%;
+			margin: 0; padding: 0;
+			}
+			
 			body{
 			background-color:black;
+			height:100%;
+			width:100%;
+			top:0;
+			position:absolute;
+			margin: 0; padding: 0; border:0;
 			}
 			
 			h1{
@@ -694,9 +706,7 @@
 			text-align:right;
 			}
 			
-			.ghostEvidenceList {
 			
-			}
 			.ghostEvidenceListRequired{
 			font-weight:bold;
 			border-left: 1px solid black;
@@ -711,7 +721,7 @@
 			.rightCorner{
 			position:absolute;
 			bottom:0;
-			right:-2;
+			right:-2px;
 			background:transparent;
 			border-bottom:50px solid var(--darkPage);
 			border-top:5px solid var(--lightPage);
@@ -723,7 +733,7 @@
 			.leftCorner{
 			position:absolute;
 			bottom:0;
-			left:-2;
+			left:-2px;
 			background:transparent;
 			border-bottom:50px solid var(--darkPage);
 			border-top:5px solid var(--lightPage);
@@ -754,6 +764,7 @@
 			.settingsContainer{
 			display:grid;
 			grid-template-columns: max-content 2% auto;
+			line-height: 1.5em;
 			}
 			.settingslabel{
 			font-size:24px;
@@ -839,6 +850,7 @@
 			top:0;
 			position:absolute;
 			z-index:-1;
+			line-height: 0;
 			}
 			
 		</style>
@@ -848,31 +860,31 @@
 		<canvas id="canvas" class="canvas"></canvas>
 		<div class="pageContainer">
 			<div class="page left">
-				<div name="page1">
+				<div data-name="page1">
 					<h1>Evidences</h1>
-					<hr class="line"></hr>
-					<div id="evidences" class="evidencesContainer"><div class="selfdestruct evidence" name="selfdestruct"> here the evidence will be</div></div>
-					<hr class="line"></hr>
-					<div id="ghosts" class="ghostContainer"><div class="selfdestruct ghost" name="selfdestruct"> Here will be the ghosts</div></div>
+					<hr class="line">
+					<div id="evidences" class="evidencesContainer"><template class="selfdestruct evidence" data-name="selfdestruct"> here the evidence will be</template></div>
+					<hr class="line">
+					<div id="ghosts" class="ghostContainer"><template class="selfdestruct ghost" data-name="selfdestruct"> Here will be the ghosts</template></div>
 				</div><!-- end page1 -->
 				
-				<div name="page2" hidden>
+				<div data-name="page2" hidden>
 					<h1>Settings:</h1>
-					<hr class="line"></hr>
+					<hr class="line">
 					<div class="settingsContainer">
-						<span class="settingsLabel" title="the number the timer starts at">Timer start:</span>
+						<label class="settingsLabel" title="the number the timer starts at">Timer start:</label>
 						<span></span>
-						<input type="number" class="number" value="-2" id="timerStart"></input>
+						<input type="number" class="number" value="-2" id="timerStart">
 						
-						<span class="settingsLabel" title="how many evidences you are playing with">How many evidences:<span id="evidenceAmount">2</span></span>
+						<label class="settingsLabel" title="how many evidences you are playing with">How many evidences:<span id="evidenceAmount">2</span></label>
 						<span></span>
 						<input type="range" class="slider" min="0" max="3" value="2" onchange="updateEvidenceAmount()" id="evidenceAmountSlider">
 						
-						<span class="settingsLabel" title="toggle the background animation">Background orbs:</span>
+						<label class="settingsLabel" title="toggle the background animation">Background orbs:</label>
 						<span></span>
-						<input type="checkbox" class="checkbox" id="animationBox" onchange="updateAnimationBoolean(this.checked)" ></input>
+						<input type="checkbox" class="checkbox" id="animationBox" onchange="updateAnimationBoolean(this.checked)" >
 						
-						<span class="settingsLabel" title="a link to a map overview site">Link to the maps</span>
+						<label class="settingsLabel" title="a link to a map overview site">Link to the maps</label>
 						<span></span>
 						<p><a class="settingInfo" href="https://phasmo.karotte.org/" target="_blank">map site</a></p>
 						
@@ -884,9 +896,9 @@
 			</div><!-- end page left-->
 			<div class="m2"></div>
 			<div class="page right"> 
-				<div name="page1">
+				<div data-name="page1">
 					<h1> Ghost</h1>
-					<hr class="line"></hr>
+					<hr class="line">
 					<div class="ghostInfoCOntainer">
 						<span class="label">Ghost: </span><span></span><span class="ghostInfo" ><a id="ghostLink" target="_blank" href="https://phasmophobia.fandom.com/wiki/"></a></span>
 						<span class="label" title="highest percentage it can be">Hunt%: </span><span></span><span class="ghostInfo" id="ghostHunt"></span>
@@ -896,13 +908,13 @@
 						<span class="label" title="read the wiki for more">Indepth info: </span><span></span><span class="ghostInfo" id="ghostInDepth">Click on the folded corner of this page (bottom right) to read how to use the journal.</span>
 					</div><!-- end ghostinfo container -->
 					<div class="timerContainer">
-						<hr class="line"></hr>
+						<hr class="line">
 						<p class="timer" id="timer"></p>
 						<button onclick="resetButton()" class="resetButton" autofocus>Reset</button>
-					</div>
+					</div><!-- end timer container -->
 					<button onclick="nextPage()" class="rightCorner"></button>
 				</div><!-- end page1 -->
-				<div name="page2" hidden>
+				<div data-name="page2" hidden>
 					<h1>How to:</h1>
 					<hr class="line">
 					<span class="text">
@@ -914,7 +926,7 @@
 					</span>
 					
 					<div class="copyright">
-						<hr class="line"></hr>
+						<hr class="line">
 						
 						<a href="https://github.com/StudentBlossom/PhasmoNightmareHelp/tree/main">Single page Phasmo nightmare journal</a> © 2025 by <a href="https://www.youtube.com/@missblossom9102">Blossom studios</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 						<div class="subhead">No AI used</div>
